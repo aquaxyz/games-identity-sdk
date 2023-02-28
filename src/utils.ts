@@ -173,15 +173,17 @@ export const generateModalContent = ({
   height,
   view,
   environment,
+  defaultUrl,
 }: {
   width: string;
   height: string;
   view: View;
   environment: Environment;
+  defaultUrl?: string;
 }) => {
   let url = `${environment}/${getViewPath(view)}`;
-  if (environment === Environment.DEVELOPMENT && process.env.DEVELOPMENT_URL) {
-    url = `${process.env.DEVELOPMENT_URL}/${getViewPath(view)}`;
+  if (environment === Environment.DEVELOPMENT && defaultUrl) {
+    url = `${defaultUrl}/${getViewPath(view)}`;
   }
   let wrapper = document.getElementById("aquaIdentityModalWrapper");
   if (!wrapper) {

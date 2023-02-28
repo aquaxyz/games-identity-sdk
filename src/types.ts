@@ -28,3 +28,9 @@ export enum Messages {
   AQUA_IDENTITY_LOGOUT_CLOSE_MODAL = "AQUA_IDENTITY_LOGOUT_CLOSE_MODAL",
   AQUA_IDENTITY_WALLET_CLOSE_MODAL = "AQUA_IDENTITY_WALLET_CLOSE_MODAL",
 }
+
+export interface HandlerProps {
+  widgetWidth?: string;
+  widgetHeight?: string;
+  defaultUrl?: string;
+}

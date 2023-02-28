@@ -11,9 +11,11 @@ export class AquaIdentitySDK {
   public async login({
     widgetHeight,
     widgetWidth,
+    defaultUrl,
   }: {
     widgetWidth?: string;
     widgetHeight?: string;
+    defaultUrl?: string;
   }) {
     const { width, height } = getModalSize({
       widgetHeight,
@@ -25,15 +27,18 @@ export class AquaIdentitySDK {
       height,
       environment: this.environment,
       view: View.LOGIN,
+      defaultUrl,
     });
   }
 
   public async logout({
     widgetHeight,
     widgetWidth,
+    defaultUrl,
   }: {
     widgetWidth?: string;
     widgetHeight?: string;
+    defaultUrl?: string;
   }) {
     const { width, height } = getModalSize({
       widgetHeight,
@@ -45,15 +50,18 @@ export class AquaIdentitySDK {
       height,
       environment: this.environment,
       view: View.LOGOUT,
+      defaultUrl,
     });
   }
 
   public async showWallet({
     widgetHeight,
     widgetWidth,
+    defaultUrl,
   }: {
     widgetWidth?: string;
     widgetHeight?: string;
+    defaultUrl?: string;
   }) {
     const { width, height } = getModalSize({
       widgetHeight,
@@ -65,6 +73,7 @@ export class AquaIdentitySDK {
       height,
       environment: this.environment,
       view: View.WALLET,
+      defaultUrl,
     });
   }
 }
