@@ -2,7 +2,7 @@
   "name": "@aquaxyz/identity-sdk",
   "packageManager": "yarn@3.2.4",
   "version": "1.0.0",
-  "description": "",
+  "description": "A typescript library using aqua identity authentication.",
   "private": true,
   "main": "dist/index.js",
   "scripts": {
@@ -33,5 +33,18 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
     "*": "prettier --write --ignore-unknown"
-  }
+  },
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aquaxyz/identity-sdk.git"
+  },
+  "keywords": [
+    "aquaxyz",
+    "identity"
+  ],
+  "bugs": {
+    "url": "https://github.com/aquaxyz/identity-sdk/issues"
+  },
+  "homepage": "https://github.com/aquaxyz/identity-sdk#readme"
 }
