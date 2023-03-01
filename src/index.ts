@@ -5,7 +5,11 @@ import {
   View,
   WalletInventory,
 } from "./types";
-import { generateModalContent, getModalSize, getUrlSearchParams } from "./utils";
+import {
+  generateModalContent,
+  getModalSize,
+  getUrlSearchParams,
+} from "./utils";
 
 export class AquaIdentitySDK {
   private readonly environment: Environment;
@@ -34,10 +38,8 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async logout({
-    widget: { widgetHeight = "0", widgetWidth = "0" } = {},
-    defaultUrl,
-  }: LogoutParams) {
+  public async logout({ widget = {}, defaultUrl }: LogoutParams) {
+    const { widgetHeight = "0", widgetWidth = "0" } = widget;
     const { width, height } = getModalSize({
       widgetHeight,
       widgetWidth,
@@ -55,10 +57,11 @@ export class AquaIdentitySDK {
   }
 
   public async getWalletInventory({
-    widget: { widgetHeight = "0", widgetWidth = "0" } = {},
+    widget = {},
     defaultUrl,
     queryParams,
   }: WalletInventory) {
+    const { widgetHeight = "0", widgetWidth = "0" } = widget;
     const { width, height } = getModalSize({
       widgetHeight,
       widgetWidth,
