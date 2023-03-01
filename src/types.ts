@@ -55,16 +55,15 @@ export interface LoginParams {
 }
 
 export interface LogoutParams {
-  widget: {
+  widget?: {
     widgetWidth?: string;
     widgetHeight?: string;
   };
   defaultUrl?: string;
-
 }
 
 export interface WalletInventory {
-  widget: {
+  widget?: {
     widgetWidth?: string;
     widgetHeight?: string;
   };

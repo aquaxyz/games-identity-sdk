@@ -35,7 +35,7 @@ export class AquaIdentitySDK {
   }
 
   public async logout({
-    widget: { widgetHeight = "0", widgetWidth = "0" },
+    widget: { widgetHeight = "0", widgetWidth = "0" } = {},
     defaultUrl,
   }: LogoutParams) {
     const { width, height } = getModalSize({
@@ -55,7 +55,7 @@ export class AquaIdentitySDK {
   }
 
   public async getWalletInventory({
-    widget: { widgetHeight = "0", widgetWidth = "0" },
+    widget: { widgetHeight = "0", widgetWidth = "0" } = {},
     defaultUrl,
     queryParams,
   }: WalletInventory) {
