@@ -38,8 +38,11 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async logout({ widget = {}, defaultUrl }: LogoutParams) {
-    const { widgetHeight = "0", widgetWidth = "0" } = widget;
+  public async logout({
+    widget = { widgetHeight: "0", widgetWidth: "0" },
+    defaultUrl,
+  }: LogoutParams) {
+    const { widgetHeight, widgetWidth } = widget;
     const { width, height } = getModalSize({
       widgetHeight,
       widgetWidth,
@@ -57,11 +60,11 @@ export class AquaIdentitySDK {
   }
 
   public async getWalletInventory({
-    widget = {},
+    widget = { widgetHeight: "0", widgetWidth: "0" },
     defaultUrl,
     queryParams,
   }: WalletInventory) {
-    const { widgetHeight = "0", widgetWidth = "0" } = widget;
+    const { widgetHeight, widgetWidth } = widget;
     const { width, height } = getModalSize({
       widgetHeight,
       widgetWidth,

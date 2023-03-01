@@ -226,7 +226,7 @@ export const generateModalContent = ({
 window.onmessage = ({ data }: { data: { type: Messages; json: string } }) => {
   const modalExists = document.getElementById("aquaIdentityModalWrapper");
   if (Object.values(Messages).includes(data?.type)) {
-    console.log(data);
+    console.log(data?.type);
   }
 
   if (data?.type === Messages.AQUA_IDENTITY_LOGIN_CLOSE_MODAL && modalExists) {
