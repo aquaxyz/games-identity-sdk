@@ -1,3 +1,4 @@
+import { AquaIdentitySDK } from "./index";
 export type Container =
   | HTMLCollectionOf<HTMLBodyElement>
   | HTMLCollectionOf<HTMLHtmlElement>
@@ -6,7 +7,7 @@ export type Container =
 export enum View {
   LOGIN = "login",
   LOGOUT = "logout",
-  WALLET_INVENTORY = "wallet_inventory",
+  INVENTORY = "inventory",
 }
 
 export enum Environment {
@@ -33,4 +34,40 @@ export interface HandlerProps {
   widgetWidth?: string;
   widgetHeight?: string;
   defaultUrl?: string;
+}
+
+export interface ModalParams {
+  widget: {
+    width: string;
+    height: string;
+  };
+  environment: Environment;
+  view: View;
+  defaultUrl?: string;
+  query?: string;
+}
+export interface LoginParams {
+  widget: {
+    widgetWidth: string;
+    widgetHeight: string;
+  };
+  defaultUrl?: string;
+}
+
+export interface LogoutParams {
+  widget: {
+    widgetWidth?: string;
+    widgetHeight?: string;
+  };
+  defaultUrl?: string;
+
+}
+
+export interface WalletInventory {
+  widget: {
+    widgetWidth?: string;
+    widgetHeight?: string;
+  };
+  defaultUrl?: string;
+  queryParams: Record<string, string>;
 }

@@ -1,4 +1,4 @@
-import { Container, View, Environment, Messages } from "./types";
+import { Container, View, Environment, Messages, ModalParams } from "./types";
 
 export const getViewPath = (view: View) => {
   switch (view) {
@@ -6,8 +6,8 @@ export const getViewPath = (view: View) => {
       return `identity/${View.LOGIN}`;
     case View.LOGOUT:
       return `identity/${View.LOGOUT}`;
-    case View.WALLET_INVENTORY:
-      return `identity/${View.WALLET_INVENTORY}`;
+    case View.INVENTORY:
+      return `identity/${View.INVENTORY}`;
     default:
       throw new Error(`${view} - undefined view`);
   }
@@ -153,7 +153,7 @@ const createModalContent = ({
                 </div>
             </div>
           </div>`;
-    case View.WALLET_INVENTORY:
+    case View.INVENTORY:
     case View.LOGOUT:
       return `<iframe 
         id="aquaIdentityWidget" 
@@ -168,22 +168,23 @@ const createModalContent = ({
 };
 
 export const generateModalContent = ({
-  width,
-  height,
+  widget: { width, height },
   view,
   environment,
   defaultUrl,
-}: {
-  width: string;
-  height: string;
-  view: View;
-  environment: Environment;
-  defaultUrl?: string;
-}) => {
-  let url = `${environment}/${getViewPath(view)}`;
-  if (environment === Environment.DEVELOPMENT && defaultUrl) {
-    url = `${defaultUrl}/${getViewPath(view)}`;
+  query,
+}: ModalParams) => {
+  const path =
+    environment === Environment.DEVELOPMENT && defaultUrl
+      ? defaultUrl
+      : environment;
+
+  let url = `${path}/${getViewPath(view)}`;
+
+  if (query) {
+    url += `?${query}`;
   }
+
   let wrapper = document.getElementById("aquaIdentityModalWrapper");
   if (!wrapper) {
     wrapper = document.createElement("div");
@@ -241,4 +242,12 @@ window.onclick = (event) => {
   if (event.target === document.getElementById("aquaIdentityModal")) {
     return closeModal();
   }
+};
+
+export const getUrlSearchParams = (
+  params: Record<string, string>
+): string => {
+  const searchParams = new URLSearchParams();
+  Object.keys(params).forEach((key: string) => searchParams.append(key, params[key]));
+  return searchParams.toString();
 };

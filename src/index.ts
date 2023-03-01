@@ -1,5 +1,11 @@
-import { Environment, View } from "./types";
-import { generateModalContent, getModalSize } from "./utils";
+import {
+  Environment,
+  LoginParams,
+  LogoutParams,
+  View,
+  WalletInventory,
+} from "./types";
+import { generateModalContent, getModalSize, getUrlSearchParams } from "./utils";
 
 export class AquaIdentitySDK {
   private readonly environment: Environment;
@@ -9,22 +15,19 @@ export class AquaIdentitySDK {
   }
 
   public async login({
-    widgetHeight,
-    widgetWidth,
+    widget: { widgetHeight, widgetWidth },
     defaultUrl,
-  }: {
-    widgetWidth?: string;
-    widgetHeight?: string;
-    defaultUrl?: string;
-  }) {
+  }: LoginParams) {
     const { width, height } = getModalSize({
       widgetHeight,
       widgetWidth,
     });
 
     generateModalContent({
-      width,
-      height,
+      widget: {
+        width,
+        height,
+      },
       environment: this.environment,
       view: View.LOGIN,
       defaultUrl,
@@ -32,48 +35,44 @@ export class AquaIdentitySDK {
   }
 
   public async logout({
-    widgetHeight,
-    widgetWidth,
+    widget: { widgetHeight = "0", widgetWidth = "0" },
     defaultUrl,
-  }: {
-    widgetWidth?: string;
-    widgetHeight?: string;
-    defaultUrl?: string;
-  }) {
+  }: LogoutParams) {
     const { width, height } = getModalSize({
       widgetHeight,
       widgetWidth,
     });
 
     generateModalContent({
-      width,
-      height,
+      widget: {
+        width,
+        height,
+      },
       environment: this.environment,
       view: View.LOGOUT,
       defaultUrl,
     });
   }
 
-  public async showWallet({
-    widgetHeight,
-    widgetWidth,
+  public async getWalletInventory({
+    widget: { widgetHeight = "0", widgetWidth = "0" },
     defaultUrl,
-  }: {
-    widgetWidth?: string;
-    widgetHeight?: string;
-    defaultUrl?: string;
-  }) {
+    queryParams,
+  }: WalletInventory) {
     const { width, height } = getModalSize({
       widgetHeight,
       widgetWidth,
     });
 
     generateModalContent({
-      width,
-      height,
+      widget: {
+        width,
+        height,
+      },
       environment: this.environment,
-      view: View.WALLET_INVENTORY,
+      view: View.INVENTORY,
       defaultUrl,
+      query: getUrlSearchParams(queryParams),
     });
   }
 }
