@@ -225,7 +225,7 @@ export const generateModalContent = ({
 
 window.onmessage = ({ data }: { data: { type: Messages; json: string } }) => {
   const modalExists = document.getElementById("aquaIdentityModalWrapper");
-  if (Messages[data?.type]) {
+  if (Object.values(Messages).includes(data?.type)) {
     console.log(data);
   }
 
@@ -233,6 +233,9 @@ window.onmessage = ({ data }: { data: { type: Messages; json: string } }) => {
     return closeModal();
   }
   if (data?.type === Messages.AQUA_IDENTITY_LOGOUT_CLOSE_MODAL && modalExists) {
+    return closeModal();
+  }
+  if (data?.type === Messages.AQUA_IDENTITY_WALLET_CLOSE_MODAL && modalExists) {
     return closeModal();
   }
 };
