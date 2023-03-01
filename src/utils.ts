@@ -3,11 +3,11 @@ import { Container, View, Environment, Messages } from "./types";
 export const getViewPath = (view: View) => {
   switch (view) {
     case View.LOGIN:
-      return View.LOGIN;
+      return `identity/${View.LOGIN}`;
     case View.LOGOUT:
-      return View.LOGOUT;
-    case View.WALLET:
-      return View.WALLET;
+      return `identity/${View.LOGOUT}`;
+    case View.WALLET_INVENTORY:
+      return `identity/${View.WALLET_INVENTORY}`;
     default:
       throw new Error(`${view} - undefined view`);
   }
@@ -136,7 +136,6 @@ const createModalContent = ({
   view: View;
 }) => {
   switch (view) {
-    case View.WALLET:
     case View.LOGIN:
       return `
           <div class="aquaIdentityModalOverlay" id="aquaIdentityModalOverlay">
@@ -154,7 +153,7 @@ const createModalContent = ({
                 </div>
             </div>
           </div>`;
-
+    case View.WALLET_INVENTORY:
     case View.LOGOUT:
       return `<iframe 
         id="aquaIdentityWidget" 
@@ -223,16 +222,16 @@ export const generateModalContent = ({
   };
 };
 
-window.onmessage = ({ data }: { data: Messages }) => {
+window.onmessage = ({ data }: { data: { type: Messages; json: string } }) => {
   const modalExists = document.getElementById("aquaIdentityModalWrapper");
-  if (data === Messages.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN) {
-    console.log("Successfully logged in");
+  if (Messages[data?.type]) {
+    console.log(data);
   }
-  if (data === Messages.AQUA_IDENTITY_LOGIN_CLOSE_MODAL && modalExists) {
+
+  if (data?.type === Messages.AQUA_IDENTITY_LOGIN_CLOSE_MODAL && modalExists) {
     return closeModal();
   }
-  if (data === Messages.AQUA_IDENTITY_LOGOUT_CLOSE_MODAL && modalExists) {
-    console.log("Successfully logged out");
+  if (data?.type === Messages.AQUA_IDENTITY_LOGOUT_CLOSE_MODAL && modalExists) {
     return closeModal();
   }
 };

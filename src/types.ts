@@ -6,7 +6,7 @@ export type Container =
 export enum View {
   LOGIN = "login",
   LOGOUT = "logout",
-  WALLET = "wallet",
+  WALLET_INVENTORY = "wallet_inventory",
 }
 
 export enum Environment {

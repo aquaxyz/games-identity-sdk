@@ -72,7 +72,7 @@ export class AquaIdentitySDK {
       width,
       height,
       environment: this.environment,
-      view: View.WALLET,
+      view: View.WALLET_INVENTORY,
       defaultUrl,
     });
   }
