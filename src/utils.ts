@@ -1,4 +1,4 @@
-import { Container, View, Environment, Messages, ModalParams } from "./types";
+import { Container, View, Environment, ModalParams } from "./types";
 
 export const getViewPath = (view: View) => {
   switch (view) {
@@ -117,6 +117,9 @@ const setStyle = (width: string, height: string) => {
 
 export const closeModal = () => {
   const modal = document.getElementById("aquaIdentityModalWrapper");
+
+  document.documentElement.style.overflow = "scroll";
+
   if (modal && modal.style) {
     modal.style.display = "none";
     modal.innerHTML = "";
@@ -221,36 +224,13 @@ export const generateModalContent = ({
   document.body.scroll = () => {
     return null;
   };
-};
 
-window.onmessage = ({ data }: { data: { type: Messages; json: string } }) => {
-  const modalExists = document.getElementById("aquaIdentityModalWrapper");
-  if (Object.values(Messages).includes(data?.type)) {
-    console.log(data?.type);
-  }
+  if (modal && modal.style) modal.style.display = "block";
 
-  if (data?.type === Messages.AQUA_IDENTITY_LOGIN_CLOSE_MODAL && modalExists) {
-    return closeModal();
-  }
-  if (data?.type === Messages.AQUA_IDENTITY_LOGOUT_CLOSE_MODAL && modalExists) {
-    return closeModal();
-  }
-  if (data?.type === Messages.AQUA_IDENTITY_WALLET_CLOSE_MODAL && modalExists) {
-    return closeModal();
-  }
-};
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = (event) => {
-  if (event.target === document.getElementById("aquaIdentityModal")) {
-    return closeModal();
-  }
-};
-
-export const getUrlSearchParams = (
-  params: Record<string, string>
-): string => {
-  const searchParams = new URLSearchParams();
-  Object.keys(params).forEach((key: string) => searchParams.append(key, params[key]));
-  return searchParams.toString();
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = (event) => {
+    if (event.target === document.getElementById("aquaIdentityModal")) {
+      return closeModal();
+    }
+  };
 };

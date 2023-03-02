@@ -1,4 +1,3 @@
-import { AquaIdentitySDK } from "./index";
 export type Container =
   | HTMLCollectionOf<HTMLBodyElement>
   | HTMLCollectionOf<HTMLHtmlElement>
@@ -22,17 +21,19 @@ export interface Settings {
   widgetWidth?: string;
 }
 
-export enum Messages {
-  AQUA_IDENTITY_LOGIN_CLOSE_MODAL = "AQUA_IDENTITY_LOGIN_CLOSE_MODAL",
-  AQUA_IDENTITY_LOGOUT_CLOSE_MODAL = "AQUA_IDENTITY_LOGOUT_CLOSE_MODAL",
-  AQUA_IDENTITY_WALLET_CLOSE_MODAL = "AQUA_IDENTITY_WALLET_CLOSE_MODAL",
-  AQUA_IDENTITY_SDK_INVENTORY_REQUEST_LOGIN = 'AQUA_IDENTITY_SDK_INVENTORY_REQUEST_LOGIN',
-  AQUA_IDENTITY_SDK_INVENTORY_DATA = 'AQUA_IDENTITY_SDK_INVENTORY_DATA',
-  AQUA_IDENTITY_SDK_INVENTORY_ERROR = 'AQUA_IDENTITY_SDK_INVENTORY_ERROR',
+export enum EVENTS {
+  AQUA_IDENTITY_MODAL_CLOSE = "AQUA_IDENTITY_MODAL_CLOSE",
+  AQUA_IDENTITY_SDK_INVENTORY = 'AQUA_IDENTITY_SDK_INVENTORY',
   AQUA_IDENTITY_SUCCESSFULLY_LOG_IN = "AQUA_IDENTITY_SUCCESSFULLY_LOG_IN",
-  AQUA_IDENTITY_SUCCESSFULLY_LOGGED_IN = "AQUA_IDENTITY_SUCCESSFULLY_LOGGED_IN",
+  AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT = "AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT",
 }
 
+export enum EXTERNAL_EVENTS {
+  MODAL_CLOSE = "MODAL_CLOSE",
+  INVENTORY = 'INVENTORY',
+  SUCCESSFULLY_LOG_IN = "SUCCESSFULLY_LOG_IN",
+  SUCCESSFULLY_LOG_OUT = "SUCCESSFULLY_LOG_OUT",
+}
 export interface HandlerProps {
   widgetWidth?: string;
   widgetHeight?: string;
@@ -75,4 +76,12 @@ export interface WalletInventory {
     walletAddress: string;
     gamePropertyId?: string;
   }
+}
+
+export interface LoginInfo {
+    walletAddress?: string;
+    authorization?: string;
+    userId?: string;
+    email?: string;
+    domainConnected?: boolean;
 }
