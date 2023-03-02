@@ -23,14 +23,14 @@ export interface Settings {
 
 export enum EVENTS {
   AQUA_IDENTITY_MODAL_CLOSE = "AQUA_IDENTITY_MODAL_CLOSE",
-  AQUA_IDENTITY_SDK_INVENTORY = 'AQUA_IDENTITY_SDK_INVENTORY',
+  AQUA_IDENTITY_SDK_INVENTORY = "AQUA_IDENTITY_SDK_INVENTORY",
   AQUA_IDENTITY_SUCCESSFULLY_LOG_IN = "AQUA_IDENTITY_SUCCESSFULLY_LOG_IN",
   AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT = "AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT",
 }
 
 export enum EXTERNAL_EVENTS {
   MODAL_CLOSE = "MODAL_CLOSE",
-  INVENTORY = 'INVENTORY',
+  INVENTORY = "INVENTORY",
   SUCCESSFULLY_LOG_IN = "SUCCESSFULLY_LOG_IN",
   SUCCESSFULLY_LOG_OUT = "SUCCESSFULLY_LOG_OUT",
 }
@@ -75,13 +75,13 @@ export interface WalletInventory {
   queryParams: {
     walletAddress: string;
     gamePropertyId?: string;
-  }
+  };
 }
 
 export interface LoginInfo {
-    walletAddress?: string;
-    authorization?: string;
-    userId?: string;
-    email?: string;
-    domainConnected?: boolean;
+  walletAddress?: string;
+  authorization?: string;
+  userId?: string;
+  email?: string;
+  domainConnected?: boolean;
 }

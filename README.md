@@ -16,32 +16,41 @@ $ npm install @aquaxyz/identity-sdk
 
 ### Example usage
 
-```sh
+```js
 import AquaIdentitySDK from '@aquaxyz/identity-sdk';
-const aquaIdentitySdk = new AquaIdentitySDK(environment: '<environment: DEVELOPMENT/PRODUCTION>'), // (Required)
+const aquaIdentitySdk = new AquaIdentitySDK(environment: '<environment: DEVELOPMENT/PRODUCTION>') // (Required)
 
-onLogin = () => aquaIdentitySdk.login({ widgetHeight, widgetWidth, defaultUrl, }: {
-        widgetWidth?: string;
-        widgetHeight?: string;
-        defaultUrl?: string;
-    }): Promise<void>;
-onLogout = () => aquaIdentitySdk.logout({ widgetHeight, widgetWidth, defaultUrl, }: {
-        widgetWidth?: string;
-        widgetHeight?: string;
-        defaultUrl?: string;
-    }): Promise<void>;
-showWallet = () => aquaIdentitySdk.showWallet({ widgetHeight, widgetWidth, defaultUrl, }: {
-        widgetWidth?: string;
-        widgetHeight?: string;
-        defaultUrl?: string;
-    }): Promise<void>;
+onLogin = () =>  await aquaIdentitySdk.login({
+        widget: {
+            widgetHeight: '700px',
+            widgetWidth: '450px'
+        },
+        defaultParams: 'localhost:8080' // Optional
+        });
+onLogout = () => await aquaIdentitySdk.logout({
+        widget: {
+            widgetHeight: '0px',
+            widgetWidth: '0px',
+        },
+        defaultParams: 'localhost:8080' // Optional
+});
+
+aquaIdentitySdk.on(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, aquaIdentitySdk.close);
+
+aquaIdentitySdk.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT, () => {
+    console.log('AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT')
+});
+
+aquaIdentitySdk.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event: any) => {
+    console.log('AQUA_IDENTITY_SUCCESSFULLY_LOG_IN', event.data)
+});
 ```
 
 ### Environments
 
 #### Development
 
-For the `DEVELOPMENT` environment, the URL is `http://localhost:3000`, but you can change it by sending `defaultUrl` property as a parameter. (It applies only for development mode.)
+For the `DEVELOPMENT` environment, the URL is `http://localhost:3000`, but you can change it by sending the `defaultUrl` property as a parameter. (It applies only to development mode.)
 
 #### Production
 
