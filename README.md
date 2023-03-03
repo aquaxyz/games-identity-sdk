@@ -1,4 +1,4 @@
-# @aquaxyz/identity-sdk
+# @aqua.xyz/identity-sdk
 
 A typescript library using aqua identity authentication.
 
@@ -8,10 +8,10 @@ A typescript library using aqua identity authentication.
 
 ```sh
 # Using yarn
-$ yarn add @aquaxyz/identity-sdk
+$ yarn add @aqua.xyz/identity-sdk
 
 # Using npm
-$ npm install @aquaxyz/identity-sdk
+$ npm install @aqua.xyz/identity-sdk
 ```
 
 ### Example usage
@@ -50,7 +50,7 @@ aquaIdentitySdk.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event: any) => {
 
 #### Development
 
-For the `DEVELOPMENT` environment, the URL is `http://localhost:3000`, but you can change it by sending the `defaultUrl` property as a parameter. (It applies only to development mode.)
+For the `DEVELOPMENT` environment, the URL is `https://new-prod-aqua.netlify.app:8080`, but you can change it by sending the `defaultUrl` property as a parameter. (It applies only to development mode.)
 
 #### Production
 
