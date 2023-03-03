@@ -18,21 +18,19 @@ $ npm install @aqua.xyz/identity-sdk
 
 ```js
 import AquaIdentitySDK from '@aqua.xyz/identity-sdk';
-const aquaIdentitySdk = new AquaIdentitySDK(environment: '<environment: DEVELOPMENT/PRODUCTION>') // (Required)
+const aquaIdentitySdk = new AquaIdentitySDK(environment: '<environment: DEVELOPMENT>') // (Required)
 
 onLogin = () =>  await aquaIdentitySdk.login({
         widget: {
             widgetHeight: '700px',
             widgetWidth: '450px'
         },
-        defaultParams: 'localhost:8080' // Optional
         });
 onLogout = () => await aquaIdentitySdk.logout({
         widget: {
             widgetHeight: '0px',
             widgetWidth: '0px',
         },
-        defaultParams: 'localhost:8080' // Optional
 });
 
 aquaIdentitySdk.on(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, aquaIdentitySdk.close);
@@ -50,8 +48,6 @@ aquaIdentitySdk.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event: any) => {
 
 #### Development
 
-For the `DEVELOPMENT` environment, the URL is `http://localhost:3000`, but you can change it by sending the `defaultUrl` property as a parameter. (It applies only to development mode.)
+For the `DEVELOPMENT` environment, the URL will be `https://new-prod-aqua.netlify.app:8080/`.
 
-#### Production
-
-For the `PRODUCTION` environment, the URL used is `https://aqua.xyz`
+#### Production (WIP)
