@@ -17,7 +17,7 @@ $ npm install @aqua.xyz/identity-sdk
 ### Example usage
 
 ```js
-import AquaIdentitySDK from '@aquaxyz/identity-sdk';
+import AquaIdentitySDK from '@aqua.xyz/identity-sdk';
 const aquaIdentitySdk = new AquaIdentitySDK(environment: '<environment: DEVELOPMENT/PRODUCTION>') // (Required)
 
 onLogin = () =>  await aquaIdentitySdk.login({
