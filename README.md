@@ -50,7 +50,7 @@ aquaIdentitySdk.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event: any) => {
 
 #### Development
 
-For the `DEVELOPMENT` environment, the URL is `https://new-prod-aqua.netlify.app:8080`, but you can change it by sending the `defaultUrl` property as a parameter. (It applies only to development mode.)
+For the `DEVELOPMENT` environment, the URL is `http://localhost:3000`, but you can change it by sending the `defaultUrl` property as a parameter. (It applies only to development mode.)
 
 #### Production
 
