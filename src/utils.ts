@@ -6,8 +6,12 @@ export const getViewPath = (view: View) => {
       return `identity/${View.LOGIN}`;
     case View.LOGOUT:
       return `identity/${View.LOGOUT}`;
-    case View.INVENTORY:
-      return `identity/${View.INVENTORY}`;
+    case View.VALIDATE_NFT_OWNERSHIP:
+      return `identity/${View.VALIDATE_NFT_OWNERSHIP}`;
+    case View.AWARD_NFT:
+        return `identity/${View.AWARD_NFT}`;
+    case View.WALLET_ADDRESS:
+      return `identity/${View.WALLET_ADDRESS}`;
     default:
       throw new Error(`${view} - undefined view`);
   }
@@ -118,8 +122,6 @@ const setStyle = (width: string, height: string) => {
 export const closeModal = () => {
   const modal = document.getElementById("aquaIdentityModalWrapper");
 
-  document.documentElement.style.overflow = "scroll";
-
   if (modal && modal.style) {
     modal.style.display = "none";
     modal.innerHTML = "";
@@ -156,7 +158,8 @@ const createModalContent = ({
                 </div>
             </div>
           </div>`;
-    case View.INVENTORY:
+    case View.VALIDATE_NFT_OWNERSHIP:
+    case View.WALLET_ADDRESS:
     case View.LOGOUT:
       return `<iframe 
         id="aquaIdentityWidget" 

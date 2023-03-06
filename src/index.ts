@@ -5,7 +5,7 @@ import {
   EVENTS,
   EXTERNAL_EVENTS,
   LoginParams,
-  LogoutParams,
+  HandlerProps,
   View,
   WalletInventory,
 } from "./types";
@@ -43,7 +43,7 @@ export class AquaIdentitySDK {
   public async logout({
     widget = { widgetHeight: "0", widgetWidth: "0" },
     defaultUrl,
-  }: LogoutParams) {
+  }: HandlerProps) {
     const { widgetHeight, widgetWidth } = widget;
     const { width, height } = getModalSize({
       widgetHeight,
@@ -61,7 +61,7 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async getWalletInventory({
+  public async validateNFTOwnership({
     widget = { widgetHeight: "0", widgetWidth: "0" },
     defaultUrl,
     queryParams,
@@ -78,9 +78,30 @@ export class AquaIdentitySDK {
         height,
       },
       environment: this.environment,
-      view: View.INVENTORY,
+      view: View.VALIDATE_NFT_OWNERSHIP,
       defaultUrl,
       query: queryString.stringify(queryParams),
+    });
+  }
+
+  public async getWalletAddress({
+    widget = { widgetHeight: "0", widgetWidth: "0" },
+    defaultUrl,
+  }: HandlerProps) {
+    const { widgetHeight, widgetWidth } = widget;
+    const { width, height } = getModalSize({
+      widgetHeight,
+      widgetWidth,
+    });
+
+    generateModalContent({
+      widget: {
+        width,
+        height,
+      },
+      environment: this.environment,
+      view: View.WALLET_ADDRESS,
+      defaultUrl,
     });
   }
 
@@ -105,10 +126,17 @@ export class AquaIdentitySDK {
           });
           break;
         }
-        case EXTERNAL_EVENTS.INVENTORY: {
-          eventEmitter.emit(EVENTS.AQUA_IDENTITY_SDK_INVENTORY, {
+        case EXTERNAL_EVENTS.VALIDATE_NFT_OWNERSHIP: {
+          eventEmitter.emit(EVENTS.AQUA_IDENTITY_VALIDATE_NFT_OWNERSHIP, {
             data: event.data.data,
-            eventName: EVENTS.AQUA_IDENTITY_SDK_INVENTORY,
+            eventName: EVENTS.AQUA_IDENTITY_VALIDATE_NFT_OWNERSHIP,
+          });
+          break;
+        }
+        case EXTERNAL_EVENTS.WALLET_ADDRESS: {
+          eventEmitter.emit(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, {
+            data: event.data.data,
+            eventName: EVENTS.AQUA_IDENTITY_WALLET_ADDRESS,
           });
           break;
         }

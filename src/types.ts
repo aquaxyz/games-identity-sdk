@@ -6,7 +6,9 @@ export type Container =
 export enum View {
   LOGIN = "login",
   LOGOUT = "logout",
-  INVENTORY = "inventory",
+  VALIDATE_NFT_OWNERSHIP = "validateNFTOwnership",
+  AWARD_NFT = "awardNFT",
+  WALLET_ADDRESS = "walletAddress",
 }
 
 export enum Environment {
@@ -23,17 +25,22 @@ export interface Settings {
 
 export enum EVENTS {
   AQUA_IDENTITY_MODAL_CLOSE = "AQUA_IDENTITY_MODAL_CLOSE",
-  AQUA_IDENTITY_SDK_INVENTORY = "AQUA_IDENTITY_SDK_INVENTORY",
+  AQUA_IDENTITY_VALIDATE_NFT_OWNERSHIP = "AQUA_IDENTITY_VALIDATE_NFT_OWNERSHIP",
+  AQUA_IDENTITY_AWARD_NFT = "AQUA_IDENTITY_AWARD_NFT",
   AQUA_IDENTITY_SUCCESSFULLY_LOG_IN = "AQUA_IDENTITY_SUCCESSFULLY_LOG_IN",
   AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT = "AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT",
+  AQUA_IDENTITY_WALLET_ADDRESS = "AQUA_IDENTITY_WALLET_ADDRESS",
 }
 
 export enum EXTERNAL_EVENTS {
   MODAL_CLOSE = "MODAL_CLOSE",
-  INVENTORY = "INVENTORY",
+  VALIDATE_NFT_OWNERSHIP = "VALIDATE_NFT_OWNERSHIP",
+  AWARD_NFT = "AWARD_NFT",
   SUCCESSFULLY_LOG_IN = "SUCCESSFULLY_LOG_IN",
   SUCCESSFULLY_LOG_OUT = "SUCCESSFULLY_LOG_OUT",
+  WALLET_ADDRESS = "WALLET_ADDRESS",
 }
+
 export interface HandlerProps {
   widgetWidth?: string;
   widgetHeight?: string;
@@ -58,7 +65,7 @@ export interface LoginParams {
   defaultUrl?: string;
 }
 
-export interface LogoutParams {
+export interface HandlerProps {
   widget?: {
     widgetWidth?: string;
     widgetHeight?: string;
@@ -73,15 +80,24 @@ export interface WalletInventory {
   };
   defaultUrl?: string;
   queryParams: {
-    walletAddress: string;
-    gamePropertyId?: string;
+    nftType: NFTTypes;
   };
 }
 
 export interface LoginInfo {
-  walletAddress?: string;
+  walletAddress?: WalletAddress;
   authorization?: string;
   userId?: string;
   email?: string;
   domainConnected?: boolean;
+}
+
+export interface WalletAddress {
+  walletAddress?: string;
+}
+
+export enum NFTTypes {
+  REDO = "redo",
+  SKIP = "skip",
+  SLOWDOWN = "slowdown",
 }
