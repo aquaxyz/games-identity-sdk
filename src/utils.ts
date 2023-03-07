@@ -1,21 +1,12 @@
-import { Container, View, Environment, ModalParams } from "./types";
+import {
+  Container,
+  View,
+  Environment,
+  ModalParams,
+  ModalContentProps,
+} from "./types";
 
-export const getViewPath = (view: View) => {
-  switch (view) {
-    case View.LOGIN:
-      return `identity/${View.LOGIN}`;
-    case View.LOGOUT:
-      return `identity/${View.LOGOUT}`;
-    case View.VALIDATE_NFT_OWNERSHIP:
-      return `identity/${View.VALIDATE_NFT_OWNERSHIP}`;
-    case View.AWARD_NFT:
-        return `identity/${View.AWARD_NFT}`;
-    case View.WALLET_ADDRESS:
-      return `identity/${View.WALLET_ADDRESS}`;
-    default:
-      throw new Error(`${view} - undefined view`);
-  }
-};
+export const getViewPath = (view: View) => `identity/${view}`;
 
 export const getModalSize = ({
   widgetWidth,
@@ -134,43 +125,32 @@ const createModalContent = ({
   width,
   height,
   url,
-}: {
-  width: string;
-  height: string;
-  url: string;
-  view: View;
-}) => {
-  switch (view) {
-    case View.LOGIN:
-      return `
-          <div class="aquaIdentityModalOverlay" id="aquaIdentityModalOverlay">
+}: ModalContentProps) => {
+  if (view === View.LOGIN) {
+    return `
+    <div class="aquaIdentityModalOverlay" id="aquaIdentityModalOverlay">
+    </div>
+    <div class="aquaIdentityModal" id="aquaIdentityModal">
+      <div class="aquaIdentityModalContent">
+          <div class="aqua_identityContainer">
+            <iframe 
+            id="aquaIdentityWidget" 
+            allow="fullscreen" 
+            allowFullScreen 
+            src="${url}" 
+            style="width: ${width}; height: ${height}"
+            ></iframe>
           </div>
-          <div class="aquaIdentityModal" id="aquaIdentityModal">
-            <div class="aquaIdentityModalContent">
-                <div class="aqua_identityContainer">
-                  <iframe 
-                  id="aquaIdentityWidget" 
-                  allow="fullscreen" 
-                  allowFullScreen 
-                  src="${url}" 
-                  style="width: ${width}; height: ${height}"
-                  ></iframe>
-                </div>
-            </div>
-          </div>`;
-    case View.VALIDATE_NFT_OWNERSHIP:
-    case View.WALLET_ADDRESS:
-    case View.LOGOUT:
-      return `<iframe 
+      </div>
+    </div>`;
+  }
+  return `<iframe 
         id="aquaIdentityWidget" 
         allow="fullscreen" 
         allowFullScreen 
         src="${url}" 
         style="width: 0px; height: 0px"
         ></iframe>`;
-    default:
-      throw new Error(`${view} - undefined view`);
-  }
 };
 
 export const generateModalContent = ({
@@ -218,18 +198,10 @@ export const generateModalContent = ({
   setStyle(width, height);
 
   const modal = document.getElementById("aquaIdentityModal");
+
   if (modal && modal.style) {
     modal.style.display = "block";
   }
-
-  //Prevent background scrolling when overlay appears
-  document.documentElement.style.overflow = "hidden";
-  document.body.scroll = () => {
-    return null;
-  };
-
-  if (modal && modal.style) modal.style.display = "block";
-
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = (event) => {
     if (event.target === document.getElementById("aquaIdentityModal")) {

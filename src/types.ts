@@ -73,7 +73,18 @@ export interface HandlerProps {
   defaultUrl?: string;
 }
 
-export interface WalletInventory {
+export interface ValidateNFTOwnership {
+  widget?: {
+    widgetWidth?: string;
+    widgetHeight?: string;
+  };
+  defaultUrl?: string;
+  queryParams: {
+    nftType: NFTTypes;
+  };
+}
+
+export interface AwardNFT {
   widget?: {
     widgetWidth?: string;
     widgetHeight?: string;
@@ -100,4 +111,11 @@ export enum NFTTypes {
   REDO = "redo",
   SKIP = "skip",
   SLOWDOWN = "slowdown",
+}
+
+export interface ModalContentProps {
+  width: string;
+  height: string;
+  url: string;
+  view: View;
 }
