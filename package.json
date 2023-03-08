@@ -1,15 +1,15 @@
 {
   "name": "@aqua.xyz/identity-sdk",
   "packageManager": "yarn@3.2.4",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "A typescript library using aqua identity authentication.",
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist/",
-    "eslint": "eslint --cache --fix .",
-    "eslint:check": "eslint .",
+    "eslint": "eslint --cache --fix ./src",
+    "eslint:check": "eslint ./src",
     "build": "tsc -b tsconfig.build.json",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write ./src"
   },
   "author": "",
   "license": "ISC",

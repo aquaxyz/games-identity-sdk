@@ -1,31 +1,4 @@
-import {
-  Container,
-  View,
-  Environment,
-  ModalParams,
-  ModalContentProps,
-} from "./types";
-
-export const getViewPath = (view: View) => `identity/${view}`;
-
-export const getModalSize = ({
-  widgetWidth,
-  widgetHeight,
-}: {
-  widgetWidth?: string;
-  widgetHeight?: string;
-} = {}): { width: string; height: string } => {
-  let width = "100%";
-  let height = "100%";
-
-  if (widgetWidth) {
-    width = widgetWidth;
-  }
-  if (widgetHeight) {
-    height = widgetHeight;
-  }
-  return { width, height };
-};
+import { Container, View, Environment, ModalParams } from "./types";
 
 const getCSS = (width: string, height: string) => {
   return `
@@ -120,41 +93,9 @@ export const closeModal = () => {
   }
 };
 
-const createModalContent = ({
-  view,
-  width,
-  height,
-  url,
-}: ModalContentProps) => {
-  if (view === View.LOGIN) {
-    return `
-    <div class="aquaIdentityModalOverlay" id="aquaIdentityModalOverlay">
-    </div>
-    <div class="aquaIdentityModal" id="aquaIdentityModal">
-      <div class="aquaIdentityModalContent">
-          <div class="aqua_identityContainer">
-            <iframe 
-            id="aquaIdentityWidget" 
-            allow="fullscreen" 
-            allowFullScreen 
-            src="${url}" 
-            style="width: ${width}; height: ${height}"
-            ></iframe>
-          </div>
-      </div>
-    </div>`;
-  }
-  return `<iframe 
-        id="aquaIdentityWidget" 
-        allow="fullscreen" 
-        allowFullScreen 
-        src="${url}" 
-        style="width: 0px; height: 0px"
-        ></iframe>`;
-};
-
 export const generateModalContent = ({
-  widget: { width, height },
+  widgetWidth = "0px",
+  widgetHeight = "0px",
   view,
   environment,
   defaultUrl,
@@ -165,7 +106,7 @@ export const generateModalContent = ({
       ? defaultUrl
       : environment;
 
-  let url = `${path}/${getViewPath(view)}`;
+  let url = `${path}/identity/${view}`;
 
   if (query) {
     url += `?${query}`;
@@ -177,15 +118,23 @@ export const generateModalContent = ({
     wrapper.id = "aquaIdentityModalWrapper";
   }
 
-  const innerHTML = createModalContent({
-    width,
-    height,
-    url,
-    view,
-  });
-  if (innerHTML) {
-    wrapper.innerHTML = innerHTML;
+  const iframeHTML = `<iframe  id="aquaIdentityWidget" allow="fullscreen" allowFullScreen src="${url}" style="width: ${widgetWidth}; height: ${widgetHeight}"></iframe>`;
+  let innerHTML = iframeHTML;
+
+  if (view === View.LOGIN) {
+    innerHTML = `
+    <div class="aquaIdentityModalOverlay" id="aquaIdentityModalOverlay">
+    </div>
+    <div class="aquaIdentityModal" id="aquaIdentityModal">
+      <div class="aquaIdentityModalContent">
+          <div class="aqua_identityContainer">
+           ${iframeHTML}
+          </div>
+      </div>
+    </div>`;
   }
+
+  wrapper.innerHTML = innerHTML;
 
   let container: Container = document.getElementsByTagName("body");
   if (!container) {
@@ -195,7 +144,7 @@ export const generateModalContent = ({
     container = document.getElementsByTagName("div");
   }
   container[0].appendChild(wrapper);
-  setStyle(width, height);
+  setStyle(widgetWidth, widgetHeight);
 
   const modal = document.getElementById("aquaIdentityModal");
 
