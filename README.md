@@ -24,15 +24,27 @@ import {
   NFTTypes,
 } from "@aqua.xyz/identity-sdk";
 
+```
+#### Development Mode
+```js
 const aquaIdentity = new AquaIdentitySDK({
   environment: Environment.DEVELOPMENT,
   defaultUrl: "https://deploy-preview-3435--new-prod-aqua.netlify.app/", // Optional, but required for alpha build
 });
+```
 
+#### Production Mode
+```js
+const aquaIdentity = new AquaIdentitySDK({
+  environment: Environment.PRODUCTION,
+});
+```
+
+```js
 const login = async () => {
   await aquaIdentity.login({
-    widgetHeight: "700px",
-    widgetWidth: "450px",
+    widgetHeight: "670px",
+    widgetWidth: "373px",
   });
 };
 
@@ -87,4 +99,6 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
 
 For the `DEVELOPMENT` environment, the local server will run on `https://new-prod-aqua.netlify.app:8080/`.
 
-#### Production (WIP)
+#### Production
+For the `PRODUCTION` environment, the local server will run on `https://games.aqua.xyz:8080/`.
+

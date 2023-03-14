@@ -2,76 +2,63 @@ import { Container, View, Environment, ModalParams } from "./types";
 
 const getCSS = (width: string, height: string) => {
   return `
-      /* Modal Content/Box */
-  
-      .aquaIdentityModal {
-      display: block;
-      width: ${width};
-      max-width: 500px;
-      height: ${height};
-      max-height: 100%;
-      position: fixed;
-      z-index: 100;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border: none;
-      border-radius: 2%;
-      margin: 0px auto;
-      display: block;
-      }
-      
-      #aquaIdentityModal{
-      min-height: ${height}; 
-      position: absolute; 
-      border: none; 
-      border-radius: 2%; 
-      margin: 0px auto; 
-      display: block;
-      }
-      
-      .aquaIdentityModalOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 50;
-      
-      background: rgba(0, 0, 0, 0.6);
-      }
-      
-      .aquaIdentityModalContent{
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      }
-      
-      .aquaIdentityModalContainer{
-      height: 100%;
-      width:100%;
-      }
-      
-      #aquaIdentityModalWrapper{
-      margin-left: 10px;
-      margin-right: 10px;
-      }
-      
-      @media all and (max-width: ${width}) {
-      .aqua_identity_modal {
-      height: 100%;
-      max-height:${height};
-      top: 53%;
-      }
-      }
-      
-      @media all and (max-height: ${height}) and (max-width: ${width}) {
-      #aquaIdentityWidget{
+.aquaIdentityModal {
+  display: block;
+  width: ${width};
+  max-width: 500px;
+  height: ${height};
+  max-height: 100%;
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: none;
+  border-radius: 2%;
+  margin: 0px auto;
+  display: block;
+}
+
+#aquaIdentityModalWidget{
+  min-height: ${height}; 
+  position: absolute; 
+  border: none; 
+  border-radius: 2%; 
+  margin: 0px auto; 
+  display: block;
+}
+
+.aquaIdentityModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.aquaIdentityModalContent{
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+@media all and (max-width: ${width}) {
+  .aquaIdentityModal {
+    height: 100%;
+    max-height: ${height};
+    top: 53%;
+  }
+}
+
+@media all and (max-height: ${height}) and (max-width: ${width}) {
+    #aquaIdentityModalWidget{
       padding-bottom: 15px;
-      }
-      }
-      `;
+    }
+  }`;
 };
 
 const setStyle = (width: string, height: string) => {
@@ -118,20 +105,20 @@ export const generateModalContent = ({
     wrapper.id = "aquaIdentityModalWrapper";
   }
 
-  const iframeHTML = `<iframe  id="aquaIdentityWidget" allow="fullscreen" allowFullScreen src="${url}" style="width: ${widgetWidth}; height: ${widgetHeight}"></iframe>`;
+  const iframeHTML = `<iframe id="aquaIdentityWidget" allow="fullscreen" allowFullScreen src="${url}" style="width: ${widgetWidth}; height: ${widgetHeight}"></iframe>`;
   let innerHTML = iframeHTML;
 
   if (view === View.LOGIN) {
     innerHTML = `
-    <div class="aquaIdentityModalOverlay" id="aquaIdentityModalOverlay">
-    </div>
-    <div class="aquaIdentityModal" id="aquaIdentityModal">
-      <div class="aquaIdentityModalContent">
-          <div class="aqua_identityContainer">
-           ${iframeHTML}
-          </div>
+      <div class="aquaIdentityModalOverlay" id="aquaIdentityModalOverlay">
       </div>
-    </div>`;
+      <div class="aquaIdentityModal" id="aquaIdentityModal">
+        <div class="aquaIdentityModalContent">
+          <div class="aquaIdentityContainer">
+            ${iframeHTML}
+          </div>
+        </div>
+      </div>`;
   }
 
   wrapper.innerHTML = innerHTML;
