@@ -56,8 +56,8 @@ const getWalletAddress = async () => {
   await aquaIdentity.getWalletAddress();
 };
 
-const validateNFTOwnership = async () => {
-  await aquaIdentity.validateNFTOwnership({
+const isNFTAwarded = async () => {
+  await aquaIdentity.isNFTAwarded({
     nftType: NFTTypes.SKIP, // NFTTypes.SLOWDOWN  ||  NFTTypes.SKIP  || NFTType.REDO
   });
 };
@@ -82,7 +82,7 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
   console.log("SUCCESSFULLY_RETRIEVED_WALLET_ADDRESS", event);
 });
 
-// --------- HARDCODED response for validateNFTOwnership, valid: true ---------
+// --------- HARDCODED response for isNFTAwarded, valid: true ---------
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_VALIDATE_NFT_OWNERSHIP, (event) => {
   console.log("SUCCESSFULLY_VALIDATE_NFT_OWNERSHIP", event);
 });
