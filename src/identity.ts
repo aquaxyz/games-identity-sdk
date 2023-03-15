@@ -68,6 +68,13 @@ export class AquaIdentitySDK {
       defaultUrl: this.defaultUrl,
     });
   }
+  public async retrieveNFTList() {
+    generateModalContent({
+      environment: this.environment,
+      view: View.RETRIEVE_NFT_LIST,
+      defaultUrl: this.defaultUrl,
+    });
+  }
 
   public async getWalletAddress() {
     generateModalContent({

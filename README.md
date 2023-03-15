@@ -61,6 +61,31 @@ const awardNFT = async () => {
   });
 };
 
+// ------- Example usage in game logic to retrieve the list of owned NFTs -------
+const nftsList = await retrieveNFTList();
+
+// Response would contain the NFTs the user already owns:
+nftsList = [
+  NFTTypes.SKIP,
+  NFTTypes.SLOWDOWN,
+  NFTTypes.REDO
+];
+
+// ------- Example usage in game logic to award the SLOWDOWN NFT on first game win -------
+if (playerWonFirstGameInLudo) {
+  const hasNFTBeenAwarded = await isNFTAwarded({ nftType: NFTTypes.SLOWDOWN });
+
+  if (!hasNFTBeenAwarded) {
+    // The "slowdown" NFT is not owned by the current logged in user
+
+    await awardNFT({ nftType: NFTTypes.SLOWDOWN }); // Awarding "slowdown" NFT to the current logged in user
+ 
+    // Game displays awarding message - example: "Congrats, you won the "slowdown" NFT
+  } else {
+    // Game should not display the awarding message, if the NFT has been already awarded by winning a first match in a different game
+  }
+}
+
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, aquaIdentity.close);
 
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
@@ -76,7 +101,7 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
 });
 
 // --------- HARDCODED response for isNFTAwarded, valid: true ---------
-aquaIdentity.on(EVENTS.AQUA_IDENTITY_VALIDATE_NFT_OWNERSHIP, (event) => {
+aquaIdentity.on(EVENTS.AQUA_IDENTITY_IS_NFT_AWARDED, (event) => {
   console.log("SUCCESSFULLY_VALIDATE_NFT_OWNERSHIP", event);
 });
 
@@ -85,20 +110,10 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
   console.log("SUCCESSFULLY_AWARD_NFT", event);
 });
 
-// ------- Example usage in game logic to award the SLOWDOWN NFT on first game win -------
-if (playerWonFirstGameInLudo) {
-  const hasNFTBeenAwarded = await isNFTAwarded({ nftType: NFTTypes.SLOWDOWN });
-
-  if (!hasNFTBeenAwarded) {
-    // The "slowdown" NFT is not owned by the current logged in user
-
-    await awardNFT({ nftType: NFTTypes.SLOWDOWN }); // Awarding "slowdown" NFT to the current logged in user
- 
-    // Game displays awarding message - example: "Congrats, you won the "slowdown" NFT
-  } else {
-    // Game should not display the awarding message, if the NFT has been already awarded by winnig a first match in a different game
-  }
-}
+// --------- HARDCODED response for retrieveNFTList, nftList: [NFTTypes.SKIP] ---------
+aquaIdentity.on(EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST, (event) => {
+  console.log("SUCCESSFULLY_AQUA_IDENTITY_RETRIEVE_NFT_LIST", event);
+});
 ```
 
 ### Environments
