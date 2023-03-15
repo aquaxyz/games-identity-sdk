@@ -87,12 +87,12 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
 
 // ------- Example usage in game logic to award the SLOWDOWN NFT on any first game win -------
 if (playerWonFirstGameInLudo) {
-  const hasNFTBeenAwarded = await aquaIdentity.isNFTAwarded({ nftType: NFTTypes.SLOWDOWN });
+  const hasNFTBeenAwarded = await isNFTAwarded({ nftType: NFTTypes.SLOWDOWN });
 
   if (!hasNFTBeenAwarded) {
     // The "slowdown" NFT is not owned by the current logged in user
 
-    await aquaIdentity.awardNFT({ nftType: NFTTypes.SLOWDOWN }); // Awarding "slowdown" NFT to the current logged in user
+    await awardNFT({ nftType: NFTTypes.SLOWDOWN }); // Awarding "slowdown" NFT to the current logged in user
  
     // Game displays awarding message - example: "Congrats, you won the "slowdown" NFT
   } else {
