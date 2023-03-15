@@ -85,7 +85,7 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
   console.log("SUCCESSFULLY_AWARD_NFT", event);
 });
 
-// ------- Example usage in game logic to award the SLOWDOWN NFT on any first game win -------
+// ------- Example usage in game logic to award the SLOWDOWN NFT on first game win -------
 if (playerWonFirstGameInLudo) {
   const hasNFTBeenAwarded = await isNFTAwarded({ nftType: NFTTypes.SLOWDOWN });
 
