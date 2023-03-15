@@ -51,10 +51,10 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async validateNFTOwnership(queryParams: { nftType: NFTTypes }) {
+  public async isNFTAwarded(queryParams: { nftType: NFTTypes }) {
     generateModalContent({
       environment: this.environment,
-      view: View.VALIDATE_NFT_OWNERSHIP,
+      view: View.IS_NFT_AWARDED,
       query: queryString.stringify(queryParams),
       defaultUrl: this.defaultUrl,
     });

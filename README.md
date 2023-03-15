@@ -25,13 +25,6 @@ import {
 } from "@aqua.xyz/identity-sdk";
 
 ```
-#### Development Mode
-```js
-const aquaIdentity = new AquaIdentitySDK({
-  environment: Environment.DEVELOPMENT,
-  defaultUrl: "https://deploy-preview-3435--new-prod-aqua.netlify.app/", // Optional, but required for alpha build
-});
-```
 
 #### Production Mode
 ```js
@@ -56,8 +49,8 @@ const getWalletAddress = async () => {
   await aquaIdentity.getWalletAddress();
 };
 
-const validateNFTOwnership = async () => {
-  await aquaIdentity.validateNFTOwnership({
+const isNFTAwarded = async () => {
+  await aquaIdentity.isNFTAwarded({
     nftType: NFTTypes.SKIP, // NFTTypes.SLOWDOWN  ||  NFTTypes.SKIP  || NFTType.REDO
   });
 };
@@ -82,7 +75,7 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
   console.log("SUCCESSFULLY_RETRIEVED_WALLET_ADDRESS", event);
 });
 
-// --------- HARDCODED response for validateNFTOwnership, valid: true ---------
+// --------- HARDCODED response for isNFTAwarded, valid: true ---------
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_VALIDATE_NFT_OWNERSHIP, (event) => {
   console.log("SUCCESSFULLY_VALIDATE_NFT_OWNERSHIP", event);
 });
@@ -91,6 +84,21 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_VALIDATE_NFT_OWNERSHIP, (event) => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
   console.log("SUCCESSFULLY_AWARD_NFT", event);
 });
+
+// ------- Example usage in game logic to award the SLOWDOWN NFT on first game win -------
+if (playerWonFirstGameInLudo) {
+  const hasNFTBeenAwarded = await isNFTAwarded({ nftType: NFTTypes.SLOWDOWN });
+
+  if (!hasNFTBeenAwarded) {
+    // The "slowdown" NFT is not owned by the current logged in user
+
+    await awardNFT({ nftType: NFTTypes.SLOWDOWN }); // Awarding "slowdown" NFT to the current logged in user
+ 
+    // Game displays awarding message - example: "Congrats, you won the "slowdown" NFT
+  } else {
+    // Game should not display the awarding message, if the NFT has been already awarded by winnig a first match in a different game
+  }
+}
 ```
 
 ### Environments
