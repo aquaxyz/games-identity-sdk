@@ -13,7 +13,6 @@ const getCSS = (width: string, height: string) => {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background: white;
   border: none;
   margin: 0px auto;
   display: block;
@@ -42,6 +41,10 @@ const getCSS = (width: string, height: string) => {
   width: 100%;
   height: 100%;
   overflow: auto;
+}
+
+.aquaIdentityContainer {
+  display: flex;
 }
 
 @media all and (max-width: ${width}) {
