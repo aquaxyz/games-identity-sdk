@@ -1,5 +1,4 @@
 import events from "events";
-import queryString from "query-string";
 import {
   Environment,
   EVENTS,
@@ -55,7 +54,7 @@ export class AquaIdentitySDK {
     generateModalContent({
       environment: this.environment,
       view: View.IS_NFT_AWARDED,
-      query: queryString.stringify(queryParams),
+      query: `?${new URLSearchParams(queryParams).toString()}`,
       defaultUrl: this.defaultUrl,
     });
   }
@@ -64,7 +63,7 @@ export class AquaIdentitySDK {
     generateModalContent({
       environment: this.environment,
       view: View.AWARD_NFT,
-      query: queryString.stringify(queryParams),
+      query: `?${new URLSearchParams(queryParams).toString()}`,
       defaultUrl: this.defaultUrl,
     });
   }
