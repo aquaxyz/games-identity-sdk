@@ -5,7 +5,7 @@ const getCSS = (width: string, height: string) => {
 .aquaIdentityModal {
   display: block;
   width: ${width};
-  max-width: 500px;
+  max-width: ${width};
   height: ${height};
   max-height: 100%;
   position: fixed;
@@ -13,9 +13,7 @@ const getCSS = (width: string, height: string) => {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background: white;
   border: none;
-  border-radius: 2%;
   margin: 0px auto;
   display: block;
 }
@@ -24,7 +22,6 @@ const getCSS = (width: string, height: string) => {
   min-height: ${height}; 
   position: absolute; 
   border: none; 
-  border-radius: 2%; 
   margin: 0px auto; 
   display: block;
 }
@@ -46,11 +43,15 @@ const getCSS = (width: string, height: string) => {
   overflow: auto;
 }
 
+.aquaIdentityContainer {
+  display: flex;
+}
+
 @media all and (max-width: ${width}) {
   .aquaIdentityModal {
     height: 100%;
     max-height: ${height};
-    top: 53%;
+    top: 50%;
   }
 }
 
@@ -105,7 +106,7 @@ export const generateModalContent = ({
     wrapper.id = "aquaIdentityModalWrapper";
   }
 
-  const iframeHTML = `<iframe id="aquaIdentityWidget" allow="fullscreen" allowFullScreen src="${url}" style="width: ${widgetWidth}; height: ${widgetHeight}"></iframe>`;
+  const iframeHTML = `<iframe id="aquaIdentityWidget" allow="fullscreen" allowFullScreen src="${url}" style="width: ${widgetWidth}; height: ${widgetHeight}; border: 0px"></iframe>`;
   let innerHTML = iframeHTML;
 
   if (view === View.LOGIN) {
@@ -140,7 +141,7 @@ export const generateModalContent = ({
   }
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = (event) => {
-    if (event.target === document.getElementById("aquaIdentityModal")) {
+    if (event.target === document.getElementById("aquaIdentityModalOverlay")) {
       return closeModal();
     }
   };

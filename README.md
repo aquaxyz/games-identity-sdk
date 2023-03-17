@@ -37,7 +37,7 @@ const aquaIdentity = new AquaIdentitySDK({
 const login = async () => {
   await aquaIdentity.login({
     widgetHeight: "670px",
-    widgetWidth: "373px",
+    widgetWidth: "370px",
   });
 };
 
