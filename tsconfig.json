@@ -1,7 +1,6 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
-    "target": "es2021",
+    "target": "ESNext",
     "lib": ["dom"],
     "noImplicitAny": false,
     "sourceMap": true,
@@ -14,8 +13,8 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "incremental": true
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
   },
-  "include": ["src/**/*.ts", "src/**/*.js"],
-  "exclude": ["node_modules"]
+  "include": ["src/*", "rollup.config.ts"]
 }
