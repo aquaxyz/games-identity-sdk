@@ -33,9 +33,8 @@ export class AquaIdentitySDK {
     window.onmessage = this.handleMessage;
   }
 
-  public async login(widget: LoginParams) {
+  public async login() {
     generateModalContent({
-      ...widget,
       defaultUrl: this.defaultUrl,
       environment: this.environment,
       view: View.LOGIN,

@@ -1,12 +1,12 @@
 import { Container, View, Environment, ModalParams } from "./types";
 
-const getCSS = (width: string, height: string) => {
+const getCSS = () => {
   return `
 .aquaIdentityModal {
   display: block;
-  width: ${width};
-  max-width: ${width};
-  height: ${height};
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
   max-height: 100%;
   position: fixed;
   z-index: 100;
@@ -19,7 +19,7 @@ const getCSS = (width: string, height: string) => {
 }
 
 #aquaIdentityModalWidget{
-  min-height: ${height}; 
+  min-height: 100vh; 
   position: absolute; 
   border: none; 
   margin: 0px auto; 
@@ -47,24 +47,24 @@ const getCSS = (width: string, height: string) => {
   display: flex;
 }
 
-@media all and (max-width: ${width}) {
+@media all and (max-width: 100vw) {
   .aquaIdentityModal {
     height: 100%;
-    max-height: ${height};
+    max-height: 100vh;
     top: 50%;
   }
 }
 
-@media all and (max-height: ${height}) and (max-width: ${width}) {
+@media all and (max-height: 100vh) and (max-width: 100vw) {
     #aquaIdentityModalWidget{
       padding-bottom: 15px;
     }
   }`;
 };
 
-const setStyle = (width: string, height: string) => {
+const setStyle = () => {
   const style = document.createElement("style");
-  style.innerHTML = getCSS(width, height);
+  style.innerHTML = getCSS();
   const modal = document.getElementById("aquaIdentityModalWrapper");
   if (modal) {
     modal.appendChild(style);
@@ -82,8 +82,6 @@ export const closeModal = () => {
 };
 
 export const generateModalContent = ({
-  widgetWidth = "0px",
-  widgetHeight = "0px",
   view,
   environment,
   defaultUrl,
@@ -106,7 +104,7 @@ export const generateModalContent = ({
     wrapper.id = "aquaIdentityModalWrapper";
   }
 
-  const iframeHTML = `<iframe id="aquaIdentityWidget" allow="fullscreen" allowFullScreen src="${url}" style="width: ${widgetWidth}; height: ${widgetHeight}; border: 0px"></iframe>`;
+  const iframeHTML = `<iframe id="aquaIdentityWidget" allow="fullscreen" allowFullScreen src="${url}" style="width: 100vw; height: 100vh; border: 0px"></iframe>`;
   let innerHTML = iframeHTML;
 
   if (view === View.LOGIN) {
@@ -132,7 +130,7 @@ export const generateModalContent = ({
     container = document.getElementsByTagName("div");
   }
   container[0].appendChild(wrapper);
-  setStyle(widgetWidth, widgetHeight);
+  setStyle();
 
   const modal = document.getElementById("aquaIdentityModal");
 
