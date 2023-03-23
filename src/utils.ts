@@ -82,8 +82,8 @@ export const closeModal = () => {
 };
 
 export const generateModalContent = ({
-  widgetWidth = "0px",
-  widgetHeight = "0px",
+  width = "0px",
+  height = "0px",
   view,
   environment,
   defaultUrl,
@@ -106,7 +106,13 @@ export const generateModalContent = ({
     wrapper.id = "aquaIdentityModalWrapper";
   }
 
-  const iframeHTML = `<iframe id="aquaIdentityWidget" allow="fullscreen" allowFullScreen src="${url}" style="width: ${widgetWidth}; height: ${widgetHeight}; border: 0px"></iframe>`;
+  const iframeHTML = `<iframe 
+  id="aquaIdentityWidget" 
+  allow="fullscreen" 
+  allowFullScreen 
+  src="${url}" 
+  style="width: ${width}; height: ${height};border: 0px"
+  ></iframe>`;
   let innerHTML = iframeHTML;
 
   if (view === View.LOGIN) {
@@ -132,7 +138,8 @@ export const generateModalContent = ({
     container = document.getElementsByTagName("div");
   }
   container[0].appendChild(wrapper);
-  setStyle(widgetWidth, widgetHeight);
+
+  setStyle(width, height);
 
   const modal = document.getElementById("aquaIdentityModal");
 
@@ -144,5 +151,67 @@ export const generateModalContent = ({
     if (event.target === document.getElementById("aquaIdentityModalOverlay")) {
       return closeModal();
     }
+  };
+};
+
+const getSizeBetweenMinMax = (
+  min: number,
+  max: number,
+  value: number
+): number => {
+  if (value >= min && value <= max) {
+    return value;
+  }
+  if (value >= max) {
+    return max;
+  }
+
+  return min;
+};
+
+export const computeModalSize = (isLandscape = false) => {
+  const isMobile =
+    navigator.userAgent.match(/Android/i) ??
+    navigator.userAgent.match(/webOS/i) ??
+    navigator.userAgent.match(/iPhone/i) ??
+    navigator.userAgent.match(/iPad/i) ??
+    navigator.userAgent.match(/iPod/i) ??
+    navigator.userAgent.match(/BlackBerry/i) ??
+    navigator.userAgent.match(/Windows Phone/i);
+
+  if (!isMobile) {
+    return {
+      width: "375px",
+      height: "667px",
+    };
+  }
+
+  const minWidth = 300;
+  const maxWidth = 448;
+
+  const portraitWidth = getSizeBetweenMinMax(
+    minWidth,
+    maxWidth,
+    window.innerWidth - 10
+  );
+  const landscapeWidth = getSizeBetweenMinMax(
+    minWidth,
+    maxWidth,
+    window.innerWidth - 50
+  );
+
+  const width = isLandscape ? landscapeWidth : portraitWidth;
+
+  const maxHeight = 660;
+
+  const portraitHeight =
+    window.innerHeight - 60 > maxHeight ? maxHeight : window.innerHeight - 60;
+  const landscapeHeight =
+    window.innerHeight - 10 > maxHeight ? maxHeight : window.innerHeight - 10;
+
+  const height = isLandscape ? landscapeHeight : portraitHeight;
+  return {
+    width: `${width}px`,
+    height: `${height}px`,
   };
 };
