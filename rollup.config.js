@@ -5,6 +5,7 @@ import tsconfig from "./tsconfig.json" assert { type: "json" };
 import terser from "@rollup/plugin-terser";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import summary from "rollup-plugin-summary";
 
 import pkg from "./package.json" assert { type: "json" };
 const name = pkg.main.replace(/\.js$/, "");
@@ -21,18 +22,21 @@ export default [
       typescript(tsconfig),
       commonjs(),
       nodeResolve({ preferBuiltins: false }),
-      terser(),
+      terser({
+        module: true,
+      }),
+      summary()
     ],
     output: [
       {
         file: `${name}.js`,
         format: "cjs",
-        sourcemap: true,
+        sourceMap: 'inline'
       },
       {
         file: `${name}.mjs`,
         format: "es",
-        sourcemap: true,
+        sourceMap: 'inline'
       },
     ],
   }),
