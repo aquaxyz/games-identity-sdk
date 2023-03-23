@@ -31,12 +31,12 @@ export default [
       {
         file: `${name}.js`,
         format: "cjs",
-        sourceMap: 'inline'
+        sourcemap: true
       },
       {
         file: `${name}.mjs`,
         format: "es",
-        sourceMap: 'inline'
+        sourcemap: true
       },
     ],
   }),
