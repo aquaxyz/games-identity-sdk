@@ -1,12 +1,12 @@
 import { Container, View, Environment, ModalParams } from "./types";
 
-const getCSS = () => {
+const getCSS = (width: string, height: string) => {
   return `
 .aquaIdentityModal {
   display: block;
-  width: 100vw;
-  max-width: 100vw;
-  height: 100vh;
+  width: ${width};
+  max-width: ${width};
+  height: ${height};
   max-height: 100%;
   position: fixed;
   z-index: 100;
@@ -19,7 +19,7 @@ const getCSS = () => {
 }
 
 #aquaIdentityModalWidget{
-  min-height: 100vh; 
+  min-height: ${height}; 
   position: absolute; 
   border: none; 
   margin: 0px auto; 
@@ -47,24 +47,24 @@ const getCSS = () => {
   display: flex;
 }
 
-@media all and (max-width: 100vw) {
+@media all and (max-width: ${width}) {
   .aquaIdentityModal {
     height: 100%;
-    max-height: 100vh;
+    max-height: ${height};
     top: 50%;
   }
 }
 
-@media all and (max-height: 100vh) and (max-width: 100vw) {
+@media all and (max-height: ${height}) and (max-width: ${width}) {
     #aquaIdentityModalWidget{
       padding-bottom: 15px;
     }
   }`;
 };
 
-const setStyle = () => {
+const setStyle = (width: string, height: string) => {
   const style = document.createElement("style");
-  style.innerHTML = getCSS();
+  style.innerHTML = getCSS(width, height);
   const modal = document.getElementById("aquaIdentityModalWrapper");
   if (modal) {
     modal.appendChild(style);
@@ -82,6 +82,8 @@ export const closeModal = () => {
 };
 
 export const generateModalContent = ({
+  width = "0px",
+  height = "0px",
   view,
   environment,
   defaultUrl,
@@ -104,7 +106,13 @@ export const generateModalContent = ({
     wrapper.id = "aquaIdentityModalWrapper";
   }
 
-  const iframeHTML = `<iframe id="aquaIdentityWidget" allow="fullscreen" allowFullScreen src="${url}" style="width: 100vw; height: 100vh; border: 0px"></iframe>`;
+  const iframeHTML = `<iframe 
+  id="aquaIdentityWidget" 
+  allow="fullscreen" 
+  allowFullScreen 
+  src="${url}" 
+  style="width: ${width}; height: ${height};border: 0px"
+  ></iframe>`;
   let innerHTML = iframeHTML;
 
   if (view === View.LOGIN) {
@@ -130,7 +138,8 @@ export const generateModalContent = ({
     container = document.getElementsByTagName("div");
   }
   container[0].appendChild(wrapper);
-  setStyle();
+
+  setStyle(width, height);
 
   const modal = document.getElementById("aquaIdentityModal");
 
@@ -142,5 +151,29 @@ export const generateModalContent = ({
     if (event.target === document.getElementById("aquaIdentityModalOverlay")) {
       return closeModal();
     }
+  };
+};
+
+export const computeModalSize = (isLandscape = false) => {
+  const minWidth = 370;
+
+  const portraitWidth =
+    window.innerWidth - 10 < minWidth ? minWidth : window.innerWidth - 10;
+  const landscapeWidth =
+    window.innerWidth - 50 < minWidth ? minWidth : window.innerWidth - 50;
+
+  const width = isLandscape ? landscapeWidth : portraitWidth;
+
+  const maxHeight = 660;
+
+  const portraitHeight =
+    window.innerHeight - 60 > maxHeight ? maxHeight : window.innerHeight - 60;
+  const landscapeHeight =
+    window.innerHeight - 10 > maxHeight ? maxHeight : window.innerHeight - 10;
+
+  const height = isLandscape ? landscapeHeight : portraitHeight;
+  return {
+    width: `${width}px`,
+    height: `${height}px`,
   };
 };

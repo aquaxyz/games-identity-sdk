@@ -35,7 +35,7 @@ const aquaIdentity = new AquaIdentitySDK({
 
 ```js
 const login = async () => {
-  await aquaIdentity.login();
+  await aquaIdentity.login({ isLandscape: true});
 };
 
 const logout = async () => {
