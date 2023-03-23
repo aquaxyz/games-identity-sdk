@@ -33,8 +33,10 @@ export class AquaIdentitySDK {
   }
 
   public async login({ isLandscape = false }: { isLandscape?: boolean }) {
+    const { width, height } = computeModalSize(isLandscape);
     generateModalContent({
-      ...computeModalSize(isLandscape),
+      width,
+      height,
       defaultUrl: this.defaultUrl,
       environment: this.environment,
       view: View.LOGIN,

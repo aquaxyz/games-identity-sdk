@@ -154,6 +154,21 @@ export const generateModalContent = ({
   };
 };
 
+const getSizeBetweenMinMax = (
+  min: number,
+  max: number,
+  value: number
+): number => {
+  if (value >= min && value <= max) {
+    return value;
+  }
+  if (value >= max) {
+    return max;
+  }
+
+  return min;
+};
+
 export const computeModalSize = (isLandscape = false) => {
   const isMobile =
     navigator.userAgent.match(/Android/i) ??
@@ -166,16 +181,24 @@ export const computeModalSize = (isLandscape = false) => {
 
   if (!isMobile) {
     return {
-      width: '375px',
-      height: '667px',
+      width: "375px",
+      height: "667px",
     };
   }
-  const minWidth = 370;
 
-  const portraitWidth =
-    window.innerWidth - 10 < minWidth ? minWidth : window.innerWidth - 10;
-  const landscapeWidth =
-    window.innerWidth - 50 < minWidth ? minWidth : window.innerWidth - 50;
+  const minWidth = 300;
+  const maxWidth = 448;
+
+  const portraitWidth = getSizeBetweenMinMax(
+    minWidth,
+    maxWidth,
+    window.innerWidth - 10
+  );
+  const landscapeWidth = getSizeBetweenMinMax(
+    minWidth,
+    maxWidth,
+    window.innerWidth - 50
+  );
 
   const width = isLandscape ? landscapeWidth : portraitWidth;
 
