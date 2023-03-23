@@ -3,7 +3,6 @@ import {
   Environment,
   EVENTS,
   EXTERNAL_EVENTS,
-  LoginParams,
   View,
   NFTTypes,
   ValidateNFTOwnershipEvent,
@@ -11,7 +10,7 @@ import {
   LoginEvent,
   WalletAddressEvent,
 } from "./types";
-import { closeModal, generateModalContent } from "./utils";
+import { closeModal, computeModalSize, generateModalContent } from "./utils";
 const eventEmitter = new events.EventEmitter();
 
 export class AquaIdentitySDK {
@@ -33,9 +32,11 @@ export class AquaIdentitySDK {
     window.onmessage = this.handleMessage;
   }
 
-  public async login(widget: LoginParams) {
+  public async login({ isLandscape = false }: { isLandscape?: boolean }) {
+    const { width, height } = computeModalSize(isLandscape);
     generateModalContent({
-      ...widget,
+      width,
+      height,
       defaultUrl: this.defaultUrl,
       environment: this.environment,
       view: View.LOGIN,

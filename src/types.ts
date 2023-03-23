@@ -37,19 +37,14 @@ export enum EXTERNAL_EVENTS {
   AWARD_NFT = "AWARD_NFT",
 }
 
-export interface LoginParams {
-  widgetWidth: string;
-  widgetHeight: string;
-}
-
 export enum NFTTypes {
   REDO = "redo",
   SKIP = "skip",
   SLOWDOWN = "slowdown",
 }
 export interface ModalParams {
-  widgetWidth?: string;
-  widgetHeight?: string;
+  width?: string;
+  height?: string;
   environment: Environment;
   view: View;
   defaultUrl?: string;
