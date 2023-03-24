@@ -55,7 +55,7 @@ export class AquaIdentitySDK {
     generateModalContent({
       environment: this.environment,
       view: View.IS_NFT_AWARDED,
-      query: `?${new URLSearchParams(queryParams).toString()}`,
+      query: new URLSearchParams(queryParams).toString(),
       defaultUrl: this.defaultUrl,
     });
   }
@@ -64,7 +64,7 @@ export class AquaIdentitySDK {
     generateModalContent({
       environment: this.environment,
       view: View.AWARD_NFT,
-      query: `?${new URLSearchParams(queryParams).toString()}`,
+      query: new URLSearchParams(queryParams).toString(),
       defaultUrl: this.defaultUrl,
     });
   }
@@ -120,9 +120,9 @@ export class AquaIdentitySDK {
       EXTERNAL_EVENTS[event.data.event_id];
     if (isAquaIdentityEvent) {
       if (event.data.event_id === EXTERNAL_EVENTS.MODAL_CLOSE) {
-        return eventEmitter.emit(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, {
+        setTimeout(() => eventEmitter.emit(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, {
           eventName: EVENTS.AQUA_IDENTITY_MODAL_CLOSE,
-        });
+        }), 1000);
       }
       return eventEmitter.emit(EVENTS[`AQUA_IDENTITY_${event.data.event_id}`], {
         data: event.data.data,
