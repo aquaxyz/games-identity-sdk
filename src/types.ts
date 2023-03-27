@@ -68,3 +68,24 @@ export interface AwardNFTEvent {
 export interface ValidateNFTOwnershipEvent {
   valid: boolean;
 }
+export enum NFTTypes {
+  slowdown = 0,
+  redo,
+  skip,
+}
+
+export const fromNFTToIndex: Record<string, NFTTypes> = {
+  slowdown: NFTTypes.slowdown,
+  redo: NFTTypes.redo,
+  skip: NFTTypes.skip,
+};
+
+export const fromIndexToNFT: Record<string, string> = {
+  0: "slowdown",
+  1: "redo",
+  2: "skip",
+};
+export interface AwardNFT {
+  nftType: NFTTypes.REDO | NFTTypes.SKIP | NFTTypes.SLOWDOWN;
+  walletAddress: string;
+}
