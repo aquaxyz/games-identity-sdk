@@ -253,7 +253,7 @@ export const awardNFT = async ({ walletAddress, nftType }: AwardNFT) => {
     })}`
   );
 
-  return { awarded: status === 200 };
+  return { valid: status === 200 };
 };
 
 const getNFTOwnership = async (walletAddress: string): Promise<number[]> => {

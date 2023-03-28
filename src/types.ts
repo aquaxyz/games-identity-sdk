@@ -68,7 +68,7 @@ export interface LogoutEvent {
 }
 
 export interface AwardNFTEvent {
-  awarded: boolean;
+  valid: boolean;
 }
 
 export interface ValidateNFTOwnershipEvent {
