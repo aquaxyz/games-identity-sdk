@@ -79,7 +79,7 @@ if (playerWonFirstGameInLudo) {
  
     // Game displays awarding message - example: "Congrats, you won the "slowdown" NFT
   } else {
-    // Game should not display the awarding message, if the NFT has been already valid by winning a first match in a different game
+    // Game should not display the awarding message, if the NFT has been already awarded by winning a first match in a different game
   }
 }
 
