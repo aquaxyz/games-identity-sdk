@@ -53,12 +53,18 @@ export interface ModalParams {
 
 export interface WalletAddressEvent {
   isLoggedIn: boolean;
-  walletAddress?: string;
+  walletAddress: string | null;
+  nftList: NFTTypes[];
 }
 
 export interface LoginEvent {
   isLoggedIn: boolean;
-  walletAddress?: string;
+  walletAddress: string;
+  nftList: NFTTypes[];
+}
+
+export interface LogoutEvent {
+  isLogout: boolean;
 }
 
 export interface AwardNFTEvent {
@@ -67,4 +73,29 @@ export interface AwardNFTEvent {
 
 export interface ValidateNFTOwnershipEvent {
   valid: boolean;
+}
+export enum NFTTypes {
+  slowdown = 0,
+  redo,
+  skip,
+}
+
+export const fromNFTToIndex: Record<string, NFTTypes> = {
+  slowdown: NFTTypes.slowdown,
+  redo: NFTTypes.redo,
+  skip: NFTTypes.skip,
+};
+
+export const fromNFTId: Record<
+  string,
+  NFTTypes.skip | NFTTypes.redo | NFTTypes.slowdown
+> = {
+  0: NFTTypes.skip,
+  1: NFTTypes.redo,
+  2: NFTTypes.slowdown,
+};
+
+export interface AwardNFT {
+  nftType: NFTTypes.REDO | NFTTypes.SKIP | NFTTypes.SLOWDOWN;
+  walletAddress: string;
 }

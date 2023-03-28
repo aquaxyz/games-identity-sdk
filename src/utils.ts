@@ -1,4 +1,13 @@
-import { Container, View, Environment, ModalParams } from "./types";
+import {
+  Container,
+  View,
+  Environment,
+  ModalParams,
+  fromNFTToIndex,
+  AwardNFT,
+  fromNFTId,
+} from "./types";
+const aquaStudioUrl = "https://api-v2.aqua.xyz/aquaStudios";
 
 const getCSS = (width: string, height: string) => {
   return `
@@ -214,4 +223,44 @@ export const computeModalSize = (isLandscape = false) => {
     width: `${width}px`,
     height: `${height}px`,
   };
+};
+
+export const checkNFTOwnership = async ({
+  walletAddress,
+  nftType,
+}: AwardNFT) => {
+  const nftList = await getNFTOwnership(walletAddress);
+
+  return {
+    valid: nftList.includes(fromNFTToIndex[nftType] as number),
+  };
+};
+
+export const retrieveNFTList = async ({
+  walletAddress,
+}: {
+  walletAddress: string;
+}) => {
+  const nftList = await getNFTOwnership(walletAddress);
+  return nftList.map((nft: number) => fromNFTId[nft]);
+};
+
+export const awardNFT = async ({ walletAddress, nftType }: AwardNFT) => {
+  const { status } = await fetch(
+    `${aquaStudioUrl}/mint?${new URLSearchParams({
+      wallet_address: walletAddress,
+      nft_type: fromNFTToIndex[nftType] as string,
+    })}`
+  );
+
+  return { valid: status === 200 };
+};
+
+const getNFTOwnership = async (walletAddress: string): Promise<number[]> => {
+  const response = await fetch(
+    `${aquaStudioUrl}/owns?${new URLSearchParams({
+      wallet_address: walletAddress,
+    })}`
+  );
+  return response.json();
 };

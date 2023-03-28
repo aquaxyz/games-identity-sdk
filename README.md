@@ -35,7 +35,7 @@ const aquaIdentity = new AquaIdentitySDK({
 
 ```js
 const login = async () => {
-  await aquaIdentity.login({ isLandscape: true});
+  await aquaIdentity.login({ isLandscape: true });
 };
 
 const logout = async () => {
@@ -79,17 +79,35 @@ if (playerWonFirstGameInLudo) {
  
     // Game displays awarding message - example: "Congrats, you won the "slowdown" NFT
   } else {
-    // Game should not display the awarding message, if the NFT has been already awarded by winning a first match in a different game
+    // Game should not display the awarding message, if the NFT has been already valid by winning a first match in a different game
   }
 }
 
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, aquaIdentity.close);
 
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
+  // Example of response
+  // event = { 
+  //   data: {
+  //     "isLoggedIn": true,
+  //     "walletAddress": "0xewgwt34..."
+  //     "nftList": [
+  //         "skip",
+  //         "redo",
+  //         "slowdown"
+  //     ]
+  //   }
+  // }
   console.log("AQUA_IDENTITY_SUCCESSFULLY_LOG_IN", event.data);
 });
 
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT, () => {
+  // Example of response
+  // event = { 
+  //   data: {
+  //     isLogout: true
+  //   }
+  // }
   console.log("SUCCESSFULLY_LOG_OUT");
 });
 
@@ -99,11 +117,23 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
 
 // --------- HARDCODED response for isNFTAwarded, valid: true ---------
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_IS_NFT_AWARDED, (event) => {
+  // Example of response
+  // event = { 
+  //   data: {
+  //     valid: true
+  //   }
+  // }
   console.log("SUCCESSFULLY_VALIDATE_NFT_OWNERSHIP", event);
 });
 
 // --------- HARDCODED response for awardNFT, valid: true ---------
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
+  // Example of response
+  // event = { 
+  //   data: {
+  //     valid: true
+  //   }
+  // }
   console.log("SUCCESSFULLY_AWARD_NFT", event);
 });
 

@@ -10,7 +10,14 @@ import {
   LoginEvent,
   WalletAddressEvent,
 } from "./types";
-import { closeModal, computeModalSize, generateModalContent } from "./utils";
+import {
+  awardNFT,
+  checkNFTOwnership,
+  closeModal,
+  computeModalSize,
+  generateModalContent,
+  retrieveNFTList,
+} from "./utils";
 const eventEmitter = new events.EventEmitter();
 
 export class AquaIdentitySDK {
@@ -51,28 +58,33 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async isNFTAwarded(queryParams: { nftType: NFTTypes }) {
-    generateModalContent({
-      environment: this.environment,
-      view: View.IS_NFT_AWARDED,
-      query: new URLSearchParams(queryParams).toString(),
-      defaultUrl: this.defaultUrl,
+  public async isNFTAwarded(queryParams: {
+    nftType: NFTTypes.REDO | NFTTypes.SKIP | NFTTypes.SLOWDOWN;
+    walletAddress: string;
+  }) {
+    const data = await checkNFTOwnership(queryParams);
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_IS_NFT_AWARDED, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_IS_NFT_AWARDED,
     });
   }
 
-  public async awardNFT(queryParams: { nftType: NFTTypes }) {
-    generateModalContent({
-      environment: this.environment,
-      view: View.AWARD_NFT,
-      query: new URLSearchParams(queryParams).toString(),
-      defaultUrl: this.defaultUrl,
+  public async awardNFT(queryParams: {
+    nftType: NFTTypes.REDO | NFTTypes.SKIP | NFTTypes.SLOWDOWN;
+    walletAddress: string;
+  }) {
+    const data = await awardNFT(queryParams);
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_AWARD_NFT, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_AWARD_NFT,
     });
   }
-  public async retrieveNFTList() {
-    generateModalContent({
-      environment: this.environment,
-      view: View.RETRIEVE_NFT_LIST,
-      defaultUrl: this.defaultUrl,
+
+  public async retrieveNFTList(queryParams: { walletAddress: string }) {
+    const data = await retrieveNFTList(queryParams);
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST,
     });
   }
 
@@ -105,11 +117,7 @@ export class AquaIdentitySDK {
 
   private handleMessage(event: {
     data: {
-      data:
-        | WalletAddressEvent
-        | LoginEvent
-        | AwardNFTEvent
-        | ValidateNFTOwnershipEvent;
+      data: WalletAddressEvent | LoginEvent;
       event_id: EXTERNAL_EVENTS;
     };
   }) {
@@ -118,11 +126,12 @@ export class AquaIdentitySDK {
       event.data &&
       event.data.event_id &&
       EXTERNAL_EVENTS[event.data.event_id];
+
     if (isAquaIdentityEvent) {
       if (event.data.event_id === EXTERNAL_EVENTS.MODAL_CLOSE) {
-        setTimeout(() => eventEmitter.emit(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, {
+        eventEmitter.emit(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, {
           eventName: EVENTS.AQUA_IDENTITY_MODAL_CLOSE,
-        }), 1000);
+        });
       }
       return eventEmitter.emit(EVENTS[`AQUA_IDENTITY_${event.data.event_id}`], {
         data: event.data.data,
