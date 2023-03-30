@@ -9,6 +9,7 @@ import {
   AwardNFTEvent,
   LoginEvent,
   WalletAddressEvent,
+  LogoutEvent,
 } from "./types";
 import {
   awardNFT,
@@ -111,13 +112,9 @@ export class AquaIdentitySDK {
     }
   }
 
-  public close() {
-    closeModal();
-  }
-
   private handleMessage(event: {
     data: {
-      data: WalletAddressEvent | LoginEvent;
+      data: WalletAddressEvent | LoginEvent | LogoutEvent;
       event_id: EXTERNAL_EVENTS;
     };
   }) {
@@ -125,18 +122,16 @@ export class AquaIdentitySDK {
       event &&
       event.data &&
       event.data.event_id &&
-      EXTERNAL_EVENTS[event.data.event_id];
+      EXTERNAL_EVENTS[event.data.event_id] !== undefined;
 
     if (isAquaIdentityEvent) {
-      if (event.data.event_id === EXTERNAL_EVENTS.MODAL_CLOSE) {
-        eventEmitter.emit(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, {
-          eventName: EVENTS.AQUA_IDENTITY_MODAL_CLOSE,
-        });
-      }
-      return eventEmitter.emit(EVENTS[`AQUA_IDENTITY_${event.data.event_id}`], {
+      eventEmitter.emit(EVENTS[`AQUA_IDENTITY_${event.data.event_id}`], {
         data: event.data.data,
         eventName: EVENTS[`AQUA_IDENTITY_${event.data.event_id}`],
       });
+      if (event.data.event_id === EXTERNAL_EVENTS.MODAL_CLOSE) {
+        closeModal();
+      }
     }
   }
 }

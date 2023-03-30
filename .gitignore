@@ -10,4 +10,5 @@ yarn-error.log*
 
 dist
 .rollup.cache
-
+.eslintcache
+.tsbuildinfo
