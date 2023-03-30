@@ -83,7 +83,12 @@ if (playerWonFirstGameInLudo) {
   }
 }
 
-aquaIdentity.on(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, aquaIdentity.close);
+aquaIdentity.on(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, () => {
+  // When this gets triggered, that means that login, getWalletAddress or 
+  // logout methods finished the execution
+  // It means that everything is stored on aqua.xyz and here is the 
+  // place where you may want to manage your local state, update or remove state
+});
 
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
   // Example of response

@@ -6,9 +6,6 @@ export type Container =
 export enum View {
   LOGIN = "login",
   LOGOUT = "logout",
-  IS_NFT_AWARDED = "isNFTAwarded",
-  AWARD_NFT = "awardNFT",
-  RETRIEVE_NFT_LIST = "retrieveNFTList",
   WALLET_ADDRESS = "walletAddress",
 }
 
@@ -32,9 +29,6 @@ export enum EXTERNAL_EVENTS {
   SUCCESSFULLY_LOG_IN = "SUCCESSFULLY_LOG_IN",
   SUCCESSFULLY_LOG_OUT = "SUCCESSFULLY_LOG_OUT",
   WALLET_ADDRESS = "WALLET_ADDRESS",
-  IS_NFT_AWARDED = "IS_NFT_AWARDED",
-  RETRIEVE_NFT_LIST = "RETRIEVE_NFT_LIST",
-  AWARD_NFT = "AWARD_NFT",
 }
 
 export enum NFTTypes {
@@ -74,6 +68,7 @@ export interface AwardNFTEvent {
 export interface ValidateNFTOwnershipEvent {
   valid: boolean;
 }
+
 export enum NFTTypes {
   slowdown = 0,
   redo,
