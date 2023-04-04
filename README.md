@@ -64,8 +64,8 @@ const nftsList = await retrieveNFTList();
 // Response would contain the NFTs the user already owns:
 nftsList = [
   NFTTypes.SKIP,
-  NFTTypes.SLOWDOWN,
-  NFTTypes.REDO
+  NFTTypes.REDO,
+  NFTTypes.SLOWDOWN
 ];
 
 // ------- Example usage in game logic to award the SLOWDOWN NFT on first game win -------

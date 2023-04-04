@@ -31,11 +31,6 @@ export enum EXTERNAL_EVENTS {
   WALLET_ADDRESS = "WALLET_ADDRESS",
 }
 
-export enum NFTTypes {
-  REDO = "redo",
-  SKIP = "skip",
-  SLOWDOWN = "slowdown",
-}
 export interface ModalParams {
   width?: string;
   height?: string;
@@ -70,26 +65,22 @@ export interface ValidateNFTOwnershipEvent {
 }
 
 export enum NFTTypes {
-  slowdown = 0,
-  redo,
-  skip,
+  SLOWDOWN = "slowdown",
+  REDO = "redo",
+  SKIP = "skip",
 }
 
-export const fromNFTToIndex: Record<string, NFTTypes> = {
-  slowdown: NFTTypes.slowdown,
-  redo: NFTTypes.redo,
-  skip: NFTTypes.skip,
+export const fromIndexToNFT: Record<number, NFTTypes> = {
+  0: NFTTypes.SLOWDOWN,
+  1: NFTTypes.REDO,
+  2: NFTTypes.SKIP,
 };
 
-export const fromNFTId: Record<
-  string,
-  NFTTypes.skip | NFTTypes.redo | NFTTypes.slowdown
-> = {
-  0: NFTTypes.skip,
-  1: NFTTypes.redo,
-  2: NFTTypes.slowdown,
+export const fromNFTToIndex: Record<NFTTypes, number> = {
+  [NFTTypes.SLOWDOWN]: 0,
+  [NFTTypes.REDO]: 1,
+  [NFTTypes.SKIP]: 2,
 };
-
 export interface AwardNFT {
   nftType: NFTTypes.REDO | NFTTypes.SKIP | NFTTypes.SLOWDOWN;
   walletAddress: string;

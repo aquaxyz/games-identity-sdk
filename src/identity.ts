@@ -4,12 +4,12 @@ import {
   EVENTS,
   EXTERNAL_EVENTS,
   View,
-  NFTTypes,
   ValidateNFTOwnershipEvent,
   AwardNFTEvent,
   LoginEvent,
   WalletAddressEvent,
   LogoutEvent,
+  NFTTypes,
 } from "./types";
 import {
   awardNFT,
@@ -60,7 +60,7 @@ export class AquaIdentitySDK {
   }
 
   public async isNFTAwarded(queryParams: {
-    nftType: NFTTypes.REDO | NFTTypes.SKIP | NFTTypes.SLOWDOWN;
+    nftType: NFTTypes;
     walletAddress: string;
   }) {
     const data = await checkNFTOwnership(queryParams);
@@ -71,7 +71,7 @@ export class AquaIdentitySDK {
   }
 
   public async awardNFT(queryParams: {
-    nftType: NFTTypes.REDO | NFTTypes.SKIP | NFTTypes.SLOWDOWN;
+    nftType: NFTTypes;
     walletAddress: string;
   }) {
     const data = await awardNFT(queryParams);

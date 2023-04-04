@@ -5,7 +5,7 @@ import {
   ModalParams,
   fromNFTToIndex,
   AwardNFT,
-  fromNFTId,
+  fromIndexToNFT,
 } from "./types";
 const aquaStudioUrl = "https://api-v2.aqua.xyz/aquaStudios";
 
@@ -118,7 +118,6 @@ export const generateModalContent = ({
   const iframeHTML = `<iframe 
   id="aquaIdentityWidget" 
   allow="fullscreen" 
-  allowFullScreen 
   src="${url}" 
   style="width: ${width}; height: ${height};border: 0px"
   ></iframe>`;
@@ -151,7 +150,6 @@ export const generateModalContent = ({
   setStyle(width, height);
 
   const modal = document.getElementById("aquaIdentityModal");
-
   if (modal && modal.style) {
     modal.style.display = "block";
   }
@@ -232,7 +230,7 @@ export const checkNFTOwnership = async ({
   const nftList = await getNFTOwnership(walletAddress);
 
   return {
-    valid: nftList.includes(fromNFTToIndex[nftType] as number),
+    valid: nftList.includes(fromNFTToIndex[nftType]),
   };
 };
 
@@ -242,14 +240,18 @@ export const retrieveNFTList = async ({
   walletAddress: string;
 }) => {
   const nftList = await getNFTOwnership(walletAddress);
-  return nftList.map((nft: number) => fromNFTId[nft]);
+  const response = nftList.map((nft: number) => {
+    return fromIndexToNFT[nft]
+  });
+
+  return response;
 };
 
 export const awardNFT = async ({ walletAddress, nftType }: AwardNFT) => {
   const { status } = await fetch(
     `${aquaStudioUrl}/mint?${new URLSearchParams({
       wallet_address: walletAddress,
-      nft_type: fromNFTToIndex[nftType] as string,
+      nft_type: fromNFTToIndex[nftType].toString(),
     })}`
   );
 
