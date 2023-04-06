@@ -70,12 +70,6 @@ export enum NFTTypes {
   SKIP = "skip",
 }
 
-export const fromIndexToNFT: Record<number, NFTTypes> = {
-  0: NFTTypes.SLOWDOWN,
-  1: NFTTypes.REDO,
-  2: NFTTypes.SKIP,
-};
-
 export const fromNFTToIndex: Record<NFTTypes, number> = {
   [NFTTypes.SLOWDOWN]: 0,
   [NFTTypes.REDO]: 1,
