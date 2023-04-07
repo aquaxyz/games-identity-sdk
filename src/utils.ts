@@ -151,12 +151,6 @@ export const generateModalContent = ({
   if (modal && modal.style) {
     modal.style.display = "block";
   }
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = (event) => {
-    if (event.target === document.getElementById("aquaIdentityModalOverlay")) {
-      return closeModal();
-    }
-  };
 };
 
 const getSizeBetweenMinMax = (
