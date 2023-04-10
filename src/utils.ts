@@ -123,7 +123,7 @@ export const generateModalContent = ({
 
   if (view === View.LOGIN) {
     innerHTML = `
-      <div class="aquaIdentityModalOverlay" id="aquaIdentityModalOverlay">
+      <div class="aquaIdentityModalOverlay">
       </div>
       <div class="aquaIdentityModal" id="aquaIdentityModal">
         <div class="aquaIdentityModalContent">
@@ -169,14 +169,29 @@ const getSizeBetweenMinMax = (
 };
 
 export const computeModalSize = (isLandscape = false) => {
+  const MOBILE_USER_AGENTS = [
+    /Android/i,
+    /webOS/i,
+    /iPhone/i,
+    /iPad/i,
+    /iPod/i,
+    /BlackBerry/i,
+    /Windows Phone/i,
+  ];
+
   const isMobile =
-    navigator.userAgent.match(/Android/i) ??
-    navigator.userAgent.match(/webOS/i) ??
-    navigator.userAgent.match(/iPhone/i) ??
-    navigator.userAgent.match(/iPad/i) ??
-    navigator.userAgent.match(/iPod/i) ??
-    navigator.userAgent.match(/BlackBerry/i) ??
-    navigator.userAgent.match(/Windows Phone/i);
+    MOBILE_USER_AGENTS.reduce((acc, agent) => {
+      if (acc) {
+        return acc;
+      }
+
+      const agentMatches = navigator.userAgent.match(agent);
+
+      return agentMatches ? agentMatches?.length > 1 : false;
+    }, false) ||
+    (/Macintosh/i.test(navigator.userAgent) &&
+      navigator.maxTouchPoints &&
+      navigator.maxTouchPoints > 1);
 
   if (!isMobile) {
     return {
