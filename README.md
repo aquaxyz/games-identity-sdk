@@ -58,6 +58,12 @@ const awardNFT = async () => {
   });
 };
 
+const verifyUserIdentity = async () => {
+    await aquaIdentity.verifyUserIdentity({
+        walletAddress: YOUR_WALLET_ADDRESS // Replace YOUR_WALLET_ADDRESS with the wallet address that needs to be verified
+    })
+}
+
 // ------- Example usage in game logic to retrieve the list of owned NFTs -------
 const nftsList = await retrieveNFTList();
 
@@ -118,6 +124,16 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT, () => {
 
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
   console.log("SUCCESSFULLY_RETRIEVED_WALLET_ADDRESS", event);
+});
+
+aquaIdentity.on(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, (event) => {
+  // Example of response
+  // event = { 
+  //   data: {
+  //     isAquaUser: true
+  //   }
+  // }
+  console.log("SUCCESSFULLY_VERIFIED_USER");
 });
 
 // --------- HARDCODED response for isNFTAwarded, valid: true ---------

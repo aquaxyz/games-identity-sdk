@@ -69,6 +69,16 @@ const getCSS = (width: string, height: string) => {
   }`;
 };
 
+export interface AuthError {
+  status: "ERROR";
+  msg: string;
+}
+export interface AuthChallengeResponse extends Partial<AuthError> {
+  public_address: string;
+  challenge: string;
+  sb_user_id: string;
+}
+
 const setStyle = (width: string, height: string) => {
   const style = document.createElement("style");
   style.innerHTML = getCSS(width, height);
@@ -248,6 +258,24 @@ export const retrieveNFTList = async ({
 }) => {
   const nftList = await getNFTOwnership(walletAddress);
   return nftList;
+};
+
+export const verifyUserIdentity = async ({
+  walletAddress,
+}: {
+  walletAddress: string;
+}) => {
+  const url = `https://api.dev.aqua.xyz/imx/auth?${new URLSearchParams({
+    method: "challenge",
+    public_address: walletAddress,
+  })}`;
+  const response = await fetch(url);
+  const json = await response.json();
+  if (!response.ok) {
+    throw new Error(json.msg ?? json.message);
+  }
+
+  return { isAquaUser: !!json.sb_user_id };
 };
 
 export const awardNFT = async ({ walletAddress, nftType }: AwardNFT) => {

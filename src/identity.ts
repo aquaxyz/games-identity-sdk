@@ -18,6 +18,7 @@ import {
   computeModalSize,
   generateModalContent,
   retrieveNFTList,
+  verifyUserIdentity,
 } from "./utils";
 const eventEmitter = new events.EventEmitter();
 
@@ -86,6 +87,14 @@ export class AquaIdentitySDK {
     eventEmitter.emit(EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST, {
       data,
       eventName: EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST,
+    });
+  }
+
+  public async verifyUserIdentity(queryParams: { walletAddress: string }) {
+    const data = await verifyUserIdentity(queryParams);
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY,
     });
   }
 
