@@ -1,25 +1,22 @@
 import events from "events";
-import {
-  Environment,
-  EVENTS,
-  EXTERNAL_EVENTS,
-  View,
-  ValidateNFTOwnershipEvent,
-  AwardNFTEvent,
-  LoginEvent,
-  WalletAddressEvent,
-  LogoutEvent,
-  NFTTypes,
-} from "./types";
+import { Environment, View, NFTTypes } from "./types";
+
+import { closeModal, computeModalSize, generateModalContent } from "./modal";
+
 import {
   awardNFT,
   checkNFTOwnership,
-  closeModal,
-  computeModalSize,
-  generateModalContent,
   retrieveNFTList,
   verifyUserIdentity,
-} from "./utils";
+} from "./requests";
+import {
+  EVENTS,
+  WalletAddressEvent,
+  LoginEvent,
+  LogoutEvent,
+  EXTERNAL_EVENTS,
+} from "./events";
+
 const eventEmitter = new events.EventEmitter();
 
 export class AquaIdentitySDK {
@@ -56,6 +53,14 @@ export class AquaIdentitySDK {
     generateModalContent({
       environment: this.environment,
       view: View.LOGOUT,
+      defaultUrl: this.defaultUrl,
+    });
+  }
+
+  public async getWalletAddress() {
+    generateModalContent({
+      environment: this.environment,
+      view: View.WALLET_ADDRESS,
       defaultUrl: this.defaultUrl,
     });
   }
@@ -98,22 +103,10 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async getWalletAddress() {
-    generateModalContent({
-      environment: this.environment,
-      view: View.WALLET_ADDRESS,
-      defaultUrl: this.defaultUrl,
-    });
-  }
-
   public on(
     type: EVENTS,
     cb: (event: {
-      data?:
-        | WalletAddressEvent
-        | LoginEvent
-        | AwardNFTEvent
-        | ValidateNFTOwnershipEvent;
+      data?: WalletAddressEvent | LoginEvent | LogoutEvent;
     }) => void
   ) {
     if (EVENTS[type]) {

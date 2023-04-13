@@ -101,7 +101,8 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
   // event = { 
   //   data: {
   //     "isLoggedIn": true,
-  //     "walletAddress": "0xewgwt34..."
+  //     "token":  "sfsaxewgwdsf...",
+  //     "walletAddress": "0xewgwt34...",
   //     "nftList": [
   //         "skip",
   //         "redo",
