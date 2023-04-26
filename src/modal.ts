@@ -1,11 +1,4 @@
-import {
-  Container,
-  View,
-  Environment,
-  ModalParams,
-  fromNFTToIndex,
-  AwardNFT,
-} from "./types";
+import { Container, View, Environment, ModalParams } from "./types";
 
 const getCSS = (width: string, height: string) => {
   return `
@@ -68,6 +61,16 @@ const getCSS = (width: string, height: string) => {
     }
   }`;
 };
+
+export interface AuthError {
+  status: "ERROR";
+  msg: string;
+}
+export interface AuthChallengeResponse extends Partial<AuthError> {
+  public_address: string;
+  challenge: string;
+  sb_user_id: string;
+}
 
 const setStyle = (width: string, height: string) => {
   const style = document.createElement("style");
@@ -228,56 +231,4 @@ export const computeModalSize = (isLandscape = false) => {
     width: `${width}px`,
     height: `${height}px`,
   };
-};
-
-export const checkNFTOwnership = async ({
-  walletAddress,
-  nftType,
-}: AwardNFT) => {
-  const nftList = await getNFTOwnership(walletAddress);
-
-  return {
-    valid: nftList.includes(nftType),
-  };
-};
-
-export const retrieveNFTList = async ({
-  walletAddress,
-}: {
-  walletAddress: string;
-}) => {
-  const nftList = await getNFTOwnership(walletAddress);
-  return nftList;
-};
-
-export const awardNFT = async ({ walletAddress, nftType }: AwardNFT) => {
-  const { status } = await fetch(
-    `https://api-v2.aqua.xyz/aquaStudios/mint?${new URLSearchParams({
-      wallet_address: walletAddress,
-      nft_type: fromNFTToIndex[nftType].toString(),
-    })}`
-  );
-
-  return { valid: status === 200 };
-};
-
-const getNFTOwnership = async (walletAddress: string): Promise<string[]> => {
-  const tokenAddress = "0x87966e1e839065d6abf069e685f1cd3ba987ff51";
-  const boostAssetClassKeys = {
-    "aqua_boosts:TimeBonus": "slowdown",
-    "aqua_boosts:Rewind": "redo",
-    "aqua_boosts:Skip": "skip",
-  };
-  const url = `https://api-v2.aqua.xyz/wallet-summary?wallet_address=${walletAddress?.toLowerCase()}&token_address=${tokenAddress}`;
-
-  const response = await fetch(url);
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.msg);
-  }
-
-  return data.walletSummary.map(
-    ({ asset_class_key }: { asset_class_key: string }) =>
-      boostAssetClassKeys[asset_class_key as keyof typeof boostAssetClassKeys]
-  );
 };

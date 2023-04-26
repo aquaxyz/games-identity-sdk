@@ -58,6 +58,26 @@ const awardNFT = async () => {
   });
 };
 
+const verifyUserIdentity = async () => {
+    await aquaIdentity.verifyUserIdentity({
+        walletAddress: YOUR_WALLET_ADDRESS, // Replace YOUR_WALLET_ADDRESS with the wallet address that needs to be verified
+        jwtToken: YOUR_TOKEN // Replace YOUR_TOKEN with the jwt token
+
+    })
+}
+
+const getOwnedDetailedNFTs = async () => {
+    await aquaIdentity.getOwnedDetailedNFTs({
+        walletAddress: YOUR_WALLET_ADDRESS // Replace YOUR_WALLET_ADDRESS with your wallet address
+    })
+}
+
+const getAwardedDetailedNFTs = async () => {
+    await aquaIdentity.getAwardedDetailedNFTs({
+        walletAddress: YOUR_WALLET_ADDRESS // Replace YOUR_WALLET_ADDRESS with your wallet address
+    })
+}
+
 // ------- Example usage in game logic to retrieve the list of owned NFTs -------
 const nftsList = await retrieveNFTList();
 
@@ -93,14 +113,21 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, () => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
   // Example of response
   // event = { 
-  //   data: {
+  //   "data": {
   //     "isLoggedIn": true,
-  //     "walletAddress": "0xewgwt34..."
+  //     "jwtToken":  "sfsaxewgwdsf...",
+  //     "walletAddress": "0xewgwt34...",
   //     "nftList": [
   //         "skip",
   //         "redo",
   //         "slowdown"
-  //     ]
+  //     ],
+  //     "nfts": {
+  //        0: 1,
+  //        1: 0,
+  //        2: 0,
+  //      }
+  //   }
   //   }
   // }
   console.log("AQUA_IDENTITY_SUCCESSFULLY_LOG_IN", event.data);
@@ -109,42 +136,103 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT, () => {
   // Example of response
   // event = { 
-  //   data: {
-  //     isLogout: true
+  //   "data": {
+  //     "isLogout": true
   //   }
   // }
   console.log("SUCCESSFULLY_LOG_OUT");
 });
 
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
+  // Example of response
+  // event = { 
+  //   "data": {
+  //     "isLoggedIn": true,
+  //     "jwtToken":  "sfsaxewgwdsf...",
+  //     "walletAddress": "0xewgwt34...",
+  //     "nftList": [
+  //         "skip",
+  //         "redo",
+  //         "slowdown"
+  //     ],
+  //     "nfts": {
+  //        0: 1,
+  //        1: 0,
+  //        2: 0,
+  //      }
+  //   }
+  //   }
+  // }
   console.log("SUCCESSFULLY_RETRIEVED_WALLET_ADDRESS", event);
 });
 
-// --------- HARDCODED response for isNFTAwarded, valid: true ---------
+aquaIdentity.on(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, (event) => {
+  // Example of response
+  // event = { 
+  //   "data": {
+  //     "valid": true,
+  //     "jwtToken":  "sfsaxewgwdsf...",
+  //     "walletAddress": "0xewgwt34...",
+  //   }
+  // }
+  console.log("SUCCESSFULLY_VERIFIED_USER");
+});
+
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_IS_NFT_AWARDED, (event) => {
   // Example of response
   // event = { 
-  //   data: {
-  //     valid: true
+  //   "data": {
+  //     "valid": true
   //   }
   // }
   console.log("SUCCESSFULLY_VALIDATE_NFT_OWNERSHIP", event);
 });
 
-// --------- HARDCODED response for awardNFT, valid: true ---------
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
   // Example of response
   // event = { 
-  //   data: {
-  //     valid: true
+  //   "data": {
+  //     "valid": true
   //   }
   // }
   console.log("SUCCESSFULLY_AWARD_NFT", event);
 });
 
-// --------- HARDCODED response for retrieveNFTList, nftList: [NFTTypes.SKIP] ---------
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST, (event) => {
+  // Example of response
+  // event = { 
+  //   "data": {
+  //     "nftList": ['skip']
+  //   }
+  // }
   console.log("SUCCESSFULLY_AQUA_IDENTITY_RETRIEVE_NFT_LIST", event);
+});
+
+aquaIdentity.on(EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS, (event) => {
+  // Example of response
+  // event = { 
+  //   "data": {
+  //     "nfts": {
+  //        0: 1,
+  //        1: 0,
+  //        2: 0,
+  //      }
+  //   }
+  // }
+  console.log("SUCCESSFULLY_RETRIEVE_OWNED_NFTS_DETAILS", event);
+});
+aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARDED_NFTS_DETAILS, (event) => {
+  // Example of response
+  // event = { 
+  //   "data": {
+  //     "nfts": {
+  //        0: 1,
+  //        1: 0,
+  //        2: 0,
+  //      }
+  //   }
+  // }
+  console.log("SUCCESSFULLY_RETRIEVE_AWARDED_NFTS_DETAILS", event);
 });
 ```
 

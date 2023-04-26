@@ -1,24 +1,24 @@
 import events from "events";
-import {
-  Environment,
-  EVENTS,
-  EXTERNAL_EVENTS,
-  View,
-  ValidateNFTOwnershipEvent,
-  AwardNFTEvent,
-  LoginEvent,
-  WalletAddressEvent,
-  LogoutEvent,
-  NFTTypes,
-} from "./types";
+import { Environment, View, NFTTypes } from "./types";
+
+import { closeModal, computeModalSize, generateModalContent } from "./modal";
+
 import {
   awardNFT,
   checkNFTOwnership,
-  closeModal,
-  computeModalSize,
-  generateModalContent,
+  retrieveAwardNFTDetails,
   retrieveNFTList,
-} from "./utils";
+  retrieveOwnedNFTDetails,
+  verifyUserIdentity,
+} from "./requests";
+import {
+  EVENTS,
+  WalletAddressEvent,
+  LoginEvent,
+  LogoutEvent,
+  EXTERNAL_EVENTS,
+} from "./events";
+
 const eventEmitter = new events.EventEmitter();
 
 export class AquaIdentitySDK {
@@ -59,6 +59,14 @@ export class AquaIdentitySDK {
     });
   }
 
+  public async getWalletAddress() {
+    generateModalContent({
+      environment: this.environment,
+      view: View.WALLET_ADDRESS,
+      defaultUrl: this.defaultUrl,
+    });
+  }
+
   public async isNFTAwarded(queryParams: {
     nftType: NFTTypes;
     walletAddress: string;
@@ -89,22 +97,51 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async getWalletAddress() {
-    generateModalContent({
-      environment: this.environment,
-      view: View.WALLET_ADDRESS,
-      defaultUrl: this.defaultUrl,
+  public async getAwardedDetailedNFTs({
+    walletAddress,
+  }: {
+    walletAddress: string;
+  }) {
+    const data = await retrieveAwardNFTDetails(walletAddress);
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_AWARDED_NFTS_DETAILS, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_AWARDED_NFTS_DETAILS,
+    });
+  }
+
+  public async getOwnedDetailedNFTs({
+    walletAddress,
+  }: {
+    walletAddress: string;
+  }) {
+    const data = await retrieveOwnedNFTDetails(walletAddress);
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS,
+    });
+  }
+
+  public async verifyUserIdentity({
+    jwtToken,
+    walletAddress,
+  }: {
+    jwtToken: string;
+    walletAddress: string;
+  }) {
+    const data = await verifyUserIdentity({
+      jwt_token: jwtToken,
+      wallet_address: walletAddress,
+    });
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY,
     });
   }
 
   public on(
     type: EVENTS,
     cb: (event: {
-      data?:
-        | WalletAddressEvent
-        | LoginEvent
-        | AwardNFTEvent
-        | ValidateNFTOwnershipEvent;
+      data?: WalletAddressEvent | LoginEvent | LogoutEvent;
     }) => void
   ) {
     if (EVENTS[type]) {
