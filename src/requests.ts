@@ -1,6 +1,8 @@
 import { RetrievedNFTDetails } from "./events";
 import { CheckNFT, fromNFTToIndex } from "./types";
 
+const aquaV2URL = 'https://api-v2.aqua.xyz';
+
 export const checkNFTOwnership = async ({
   walletAddress,
   nftType,
@@ -41,7 +43,7 @@ export const verifyUserIdentity = async ({
 
 export const awardNFT = async ({ walletAddress, nftType }: CheckNFT) => {
   const { status } = await fetch(
-    `https://api-v2.aqua.xyz/aquaStudios/mint?${new URLSearchParams({
+    `${aquaV2URL}/aquaStudios/mint?${new URLSearchParams({
       wallet_address: walletAddress,
       nft_type: fromNFTToIndex[nftType].toString(),
     })}`
@@ -57,7 +59,7 @@ const getNFTOwnership = async (walletAddress: string): Promise<string[]> => {
     "aqua_boosts:Rewind": "redo",
     "aqua_boosts:Skip": "skip",
   };
-  const url = `https://api-v2.aqua.xyz/wallet-summary?wallet_address=${walletAddress?.toLowerCase()}&token_address=${tokenAddress}`;
+  const url = `${aquaV2URL}/wallet-summary?wallet_address=${walletAddress?.toLowerCase()}&token_addresses=${tokenAddress}`;
 
   const response = await fetch(url);
   const data = await response.json();
@@ -73,7 +75,7 @@ const getNFTOwnership = async (walletAddress: string): Promise<string[]> => {
 
 export const retrieveOwnedNFTDetails = async (wallet_address: string) => {
   const response = await fetch(
-    `https://api-v2.aqua.xyz/aquaStudios/retrieve-owned-nfts?${new URLSearchParams(
+    `${aquaV2URL}/aquaStudios/retrieve-owned-nfts?${new URLSearchParams(
       {
         wallet_address,
       }
@@ -88,7 +90,7 @@ export const retrieveOwnedNFTDetails = async (wallet_address: string) => {
 
 export const retrieveAwardNFTDetails = async (wallet_address: string) => {
   const response = await fetch(
-    `https://api-v2.aqua.xyz/aquaStudios/retrieve-awarded-nfts?${new URLSearchParams(
+    `${aquaV2URL}/aquaStudios/retrieve-awarded-nfts?${new URLSearchParams(
       {
         wallet_address,
       }
