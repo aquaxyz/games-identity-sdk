@@ -68,13 +68,13 @@ const verifyUserIdentity = async () => {
 
 const getOwnedDetailedNFTs = async () => {
     await aquaIdentity.getOwnedDetailedNFTs({
-        walletAddress: YOUR_WALLET_ADDRESS /
+        walletAddress: YOUR_WALLET_ADDRESS // Replace YOUR_WALLET_ADDRESS with your wallet address
     })
 }
 
 const getAwardedDetailedNFTs = async () => {
     await aquaIdentity.getAwardedDetailedNFTs({
-        walletAddress: YOUR_WALLET_ADDRESS /
+        walletAddress: YOUR_WALLET_ADDRESS // Replace YOUR_WALLET_ADDRESS with your wallet address
     })
 }
 
@@ -121,7 +121,13 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
   //         "skip",
   //         "redo",
   //         "slowdown"
-  //     ]
+  //     ],
+  //     nfts: {
+  //        0: 1,
+  //        1: 0,
+  //        2: 0,
+  //      }
+  //   }
   //   }
   // }
   console.log("AQUA_IDENTITY_SUCCESSFULLY_LOG_IN", event.data);
@@ -138,6 +144,25 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT, () => {
 });
 
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
+  // Example of response
+  // event = { 
+  //   data: {
+  //     "isLoggedIn": true,
+  //     "token":  "sfsaxewgwdsf...",
+  //     "walletAddress": "0xewgwt34...",
+  //     "nftList": [
+  //         "skip",
+  //         "redo",
+  //         "slowdown"
+  //     ],
+  //     nfts: {
+  //        0: 1,
+  //        1: 0,
+  //        2: 0,
+  //      }
+  //   }
+  //   }
+  // }
   console.log("SUCCESSFULLY_RETRIEVED_WALLET_ADDRESS", event);
 });
 
