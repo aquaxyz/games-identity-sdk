@@ -61,6 +61,20 @@ const awardNFT = async () => {
 const verifyUserIdentity = async () => {
     await aquaIdentity.verifyUserIdentity({
         walletAddress: YOUR_WALLET_ADDRESS // Replace YOUR_WALLET_ADDRESS with the wallet address that needs to be verified
+        token: YOUR_TOKEN // Replace YOUR_TOKEN with the jwt token
+
+    })
+}
+
+const getOwnedDetailedNFTs = async () => {
+    await aquaIdentity.getOwnedDetailedNFTs({
+        walletAddress: YOUR_WALLET_ADDRESS /
+    })
+}
+
+const getAwardedDetailedNFTs = async () => {
+    await aquaIdentity.getAwardedDetailedNFTs({
+        walletAddress: YOUR_WALLET_ADDRESS /
     })
 }
 
@@ -131,13 +145,12 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, (event) => {
   // Example of response
   // event = { 
   //   data: {
-  //     isAquaUser: true
+  //     valid: true
   //   }
   // }
   console.log("SUCCESSFULLY_VERIFIED_USER");
 });
 
-// --------- HARDCODED response for isNFTAwarded, valid: true ---------
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_IS_NFT_AWARDED, (event) => {
   // Example of response
   // event = { 
@@ -148,7 +161,6 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_IS_NFT_AWARDED, (event) => {
   console.log("SUCCESSFULLY_VALIDATE_NFT_OWNERSHIP", event);
 });
 
-// --------- HARDCODED response for awardNFT, valid: true ---------
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
   // Example of response
   // event = { 
@@ -159,9 +171,41 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
   console.log("SUCCESSFULLY_AWARD_NFT", event);
 });
 
-// --------- HARDCODED response for retrieveNFTList, nftList: [NFTTypes.SKIP] ---------
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST, (event) => {
+  // Example of response
+  // event = { 
+  //   data: {
+  //     nftList: ['skip']
+  //   }
+  // }
   console.log("SUCCESSFULLY_AQUA_IDENTITY_RETRIEVE_NFT_LIST", event);
+});
+
+aquaIdentity.on(EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS, (event) => {
+  // Example of response
+  // event = { 
+  //   data: {
+  //     nfts: {
+  //        0: 1,
+  //        1: 0,
+  //        2: 0,
+  //      }
+  //   }
+  // }
+  console.log("SUCCESSFULLY_RETRIEVE_OWNED_NFTS_DETAILS", event);
+});
+aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARDED_NFTS_DETAILS, (event) => {
+  // Example of response
+  // event = { 
+  //   data: {
+  //     nfts: {
+  //        0: 1,
+  //        1: 0,
+  //        2: 0,
+  //      }
+  //   }
+  // }
+  console.log("SUCCESSFULLY_RETRIEVE_AWARDED_NFTS_DETAILS", event);
 });
 ```
 

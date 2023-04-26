@@ -7,6 +7,8 @@ export enum EVENTS {
   AQUA_IDENTITY_WALLET_ADDRESS = "AQUA_IDENTITY_WALLET_ADDRESS",
   AQUA_IDENTITY_IS_NFT_AWARDED = "AQUA_IDENTITY_IS_NFT_AWARDED",
   AQUA_IDENTITY_RETRIEVE_NFT_LIST = "AQUA_IDENTITY_RETRIEVE_NFT_LIST",
+  AQUA_IDENTITY_OWNED_NFTS_DETAILS = "AQUA_IDENTITY_OWNED_NFTS_DETAILS",
+  AQUA_IDENTITY_AWARDED_NFTS_DETAILS = "AQUA_IDENTITY_AWARDED_NFTS_DETAILS",
   AQUA_IDENTITY_AWARD_NFT = "AQUA_IDENTITY_AWARD_NFT",
   AQUA_IDENTITY_VERIFY_USER_IDENTITY = "AQUA_IDENTITY_VERIFY_USER_IDENTITY",
 }
@@ -23,6 +25,7 @@ export interface WalletAddressEvent {
   walletAddress: string | null;
   token: string | null;
   nftList: NFTTypes[];
+  ownedNfts: RetrievedNFTDetails;
 }
 
 export interface LoginEvent {
@@ -30,6 +33,7 @@ export interface LoginEvent {
   walletAddress: string;
   token: string;
   nftList: NFTTypes[];
+  ownedNfts: RetrievedNFTDetails;
 }
 
 export interface LogoutEvent {
@@ -42,4 +46,10 @@ export interface AwardNFTEvent {
 
 export interface ValidateNFTOwnershipEvent {
   valid: boolean;
+}
+
+export interface RetrievedNFTDetails {
+  0: number;
+  1: number;
+  2: number;
 }

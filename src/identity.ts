@@ -6,7 +6,9 @@ import { closeModal, computeModalSize, generateModalContent } from "./modal";
 import {
   awardNFT,
   checkNFTOwnership,
+  retrieveAwardNFTDetails,
   retrieveNFTList,
+  retrieveOwnedNFTDetails,
   verifyUserIdentity,
 } from "./requests";
 import {
@@ -95,7 +97,34 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async verifyUserIdentity(queryParams: { walletAddress: string }) {
+  public async getAwardedDetailedNFTs({
+    walletAddress,
+  }: {
+    walletAddress: string;
+  }) {
+    const data = await retrieveAwardNFTDetails(walletAddress);
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_AWARDED_NFTS_DETAILS, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_AWARDED_NFTS_DETAILS,
+    });
+  }
+
+  public async getOwnedDetailedNFTs({
+    walletAddress,
+  }: {
+    walletAddress: string;
+  }) {
+    const data = await retrieveOwnedNFTDetails(walletAddress);
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS,
+    });
+  }
+
+  public async verifyUserIdentity(queryParams: {
+    token: string;
+    walletAddress: string;
+  }) {
     const data = await verifyUserIdentity(queryParams);
     eventEmitter.emit(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, {
       data,

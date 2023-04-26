@@ -1,3 +1,4 @@
+import { RetrievedNFTDetails } from "./events";
 import { CheckNFT, fromNFTToIndex } from "./types";
 
 export const checkNFTOwnership = async ({
@@ -35,7 +36,7 @@ export const verifyUserIdentity = async ({
     throw new Error(json.msg ?? json.message);
   }
 
-  return { isAquaUser: !!json.sb_user_id };
+  return { valid: !!json.sb_user_id };
 };
 
 export const awardNFT = async ({ walletAddress, nftType }: CheckNFT) => {
@@ -68,4 +69,34 @@ const getNFTOwnership = async (walletAddress: string): Promise<string[]> => {
     ({ asset_class_key }: { asset_class_key: string }) =>
       boostAssetClassKeys[asset_class_key as keyof typeof boostAssetClassKeys]
   );
+};
+
+export const retrieveOwnedNFTDetails = async (wallet_address: string) => {
+  const response = await fetch(
+    `https://api-v2.aqua.xyz/aquaStudios/retrieve-owned-nfts?${new URLSearchParams(
+      {
+        wallet_address,
+      }
+    )}`
+  );
+  const json = await response.json();
+  if (!response.ok) {
+    throw new Error(json.msg ?? json.message);
+  }
+  return { nfts: json as RetrievedNFTDetails };
+};
+
+export const retrieveAwardNFTDetails = async (wallet_address: string) => {
+  const response = await fetch(
+    `https://api-v2.aqua.xyz/aquaStudios/retrieve-awarded-nfts?${new URLSearchParams(
+      {
+        wallet_address,
+      }
+    )}`
+  );
+  const json = await response.json();
+  if (!response.ok) {
+    throw new Error(json.msg ?? json.message);
+  }
+  return { nfts: json as RetrievedNFTDetails };
 };
