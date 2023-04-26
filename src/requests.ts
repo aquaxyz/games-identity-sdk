@@ -1,7 +1,7 @@
 import { RetrievedNFTDetails } from "./events";
 import { CheckNFT, fromNFTToIndex } from "./types";
 
-const aquaV2URL = 'https://api-v2.aqua.xyz';
+const aquaV2URL = "https://api-v2.aqua.xyz";
 
 export const checkNFTOwnership = async ({
   walletAddress,
@@ -24,21 +24,37 @@ export const retrieveNFTList = async ({
 };
 
 export const verifyUserIdentity = async ({
-  walletAddress,
+  wallet_address,
+  jwt_token,
 }: {
-  walletAddress: string;
+  wallet_address: string;
+  jwt_token: string;
 }) => {
-  const url = `https://api.aqua.xyz/imx/auth?${new URLSearchParams({
-    method: "challenge",
-    public_address: walletAddress,
-  })}`;
-  const response = await fetch(url);
+  const response = await fetch(
+    `${aquaV2URL}/aquaStudios/validate-jwt-token?${new URLSearchParams({
+      wallet_address,
+      jwt_token,
+    })}`
+  );
   const json = await response.json();
-  if (!response.ok) {
-    throw new Error(json.msg ?? json.message);
+  if (json?.error) {
+    throw new Error(
+      `${json.error}. ${JSON.stringify(
+        {
+          jwtToken: json.jwt_token,
+          walletAddress: json.wallet_address,
+        },
+        null,
+        2
+      )}`
+    );
   }
 
-  return { valid: !!json.sb_user_id };
+  return {
+    valid: true,
+    jwtToken: json.jwt_token,
+    walletAddress: json.wallet_address,
+  };
 };
 
 export const awardNFT = async ({ walletAddress, nftType }: CheckNFT) => {
@@ -75,11 +91,9 @@ const getNFTOwnership = async (walletAddress: string): Promise<string[]> => {
 
 export const retrieveOwnedNFTDetails = async (wallet_address: string) => {
   const response = await fetch(
-    `${aquaV2URL}/aquaStudios/retrieve-owned-nfts?${new URLSearchParams(
-      {
-        wallet_address,
-      }
-    )}`
+    `${aquaV2URL}/aquaStudios/retrieve-owned-nfts?${new URLSearchParams({
+      wallet_address,
+    })}`
   );
   const json = await response.json();
   if (!response.ok) {
@@ -90,11 +104,9 @@ export const retrieveOwnedNFTDetails = async (wallet_address: string) => {
 
 export const retrieveAwardNFTDetails = async (wallet_address: string) => {
   const response = await fetch(
-    `${aquaV2URL}/aquaStudios/retrieve-awarded-nfts?${new URLSearchParams(
-      {
-        wallet_address,
-      }
-    )}`
+    `${aquaV2URL}/aquaStudios/retrieve-awarded-nfts?${new URLSearchParams({
+      wallet_address,
+    })}`
   );
   const json = await response.json();
   if (!response.ok) {

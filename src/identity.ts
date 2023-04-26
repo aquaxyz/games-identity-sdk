@@ -121,11 +121,17 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async verifyUserIdentity(queryParams: {
-    token: string;
+  public async verifyUserIdentity({
+    jwtToken,
+    walletAddress,
+  }: {
+    jwtToken: string;
     walletAddress: string;
   }) {
-    const data = await verifyUserIdentity(queryParams);
+    const data = await verifyUserIdentity({
+      jwt_token: jwtToken,
+      wallet_address: walletAddress,
+    });
     eventEmitter.emit(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, {
       data,
       eventName: EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY,

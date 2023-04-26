@@ -61,7 +61,7 @@ const awardNFT = async () => {
 const verifyUserIdentity = async () => {
     await aquaIdentity.verifyUserIdentity({
         walletAddress: YOUR_WALLET_ADDRESS, // Replace YOUR_WALLET_ADDRESS with the wallet address that needs to be verified
-        token: YOUR_TOKEN // Replace YOUR_TOKEN with the jwt token
+        jwtToken: YOUR_TOKEN // Replace YOUR_TOKEN with the jwt token
 
     })
 }
@@ -113,16 +113,16 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_MODAL_CLOSE, () => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
   // Example of response
   // event = { 
-  //   data: {
+  //   "data": {
   //     "isLoggedIn": true,
-  //     "token":  "sfsaxewgwdsf...",
+  //     "jwtToken":  "sfsaxewgwdsf...",
   //     "walletAddress": "0xewgwt34...",
   //     "nftList": [
   //         "skip",
   //         "redo",
   //         "slowdown"
   //     ],
-  //     nfts: {
+  //     "nfts": {
   //        0: 1,
   //        1: 0,
   //        2: 0,
@@ -136,8 +136,8 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT, () => {
   // Example of response
   // event = { 
-  //   data: {
-  //     isLogout: true
+  //   "data": {
+  //     "isLogout": true
   //   }
   // }
   console.log("SUCCESSFULLY_LOG_OUT");
@@ -146,16 +146,16 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT, () => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
   // Example of response
   // event = { 
-  //   data: {
+  //   "data": {
   //     "isLoggedIn": true,
-  //     "token":  "sfsaxewgwdsf...",
+  //     "jwtToken":  "sfsaxewgwdsf...",
   //     "walletAddress": "0xewgwt34...",
   //     "nftList": [
   //         "skip",
   //         "redo",
   //         "slowdown"
   //     ],
-  //     nfts: {
+  //     "nfts": {
   //        0: 1,
   //        1: 0,
   //        2: 0,
@@ -169,8 +169,10 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, (event) => {
   // Example of response
   // event = { 
-  //   data: {
-  //     valid: true
+  //   "data": {
+  //     "valid": true,
+  //     "jwtToken":  "sfsaxewgwdsf...",
+  //     "walletAddress": "0xewgwt34...",
   //   }
   // }
   console.log("SUCCESSFULLY_VERIFIED_USER");
@@ -179,8 +181,8 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, (event) => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_IS_NFT_AWARDED, (event) => {
   // Example of response
   // event = { 
-  //   data: {
-  //     valid: true
+  //   "data": {
+  //     "valid": true
   //   }
   // }
   console.log("SUCCESSFULLY_VALIDATE_NFT_OWNERSHIP", event);
@@ -189,8 +191,8 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_IS_NFT_AWARDED, (event) => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
   // Example of response
   // event = { 
-  //   data: {
-  //     valid: true
+  //   "data": {
+  //     "valid": true
   //   }
   // }
   console.log("SUCCESSFULLY_AWARD_NFT", event);
@@ -199,8 +201,8 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARD_NFT, (event) => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST, (event) => {
   // Example of response
   // event = { 
-  //   data: {
-  //     nftList: ['skip']
+  //   "data": {
+  //     "nftList": ['skip']
   //   }
   // }
   console.log("SUCCESSFULLY_AQUA_IDENTITY_RETRIEVE_NFT_LIST", event);
@@ -209,8 +211,8 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST, (event) => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS, (event) => {
   // Example of response
   // event = { 
-  //   data: {
-  //     nfts: {
+  //   "data": {
+  //     "nfts": {
   //        0: 1,
   //        1: 0,
   //        2: 0,
@@ -222,8 +224,8 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS, (event) => {
 aquaIdentity.on(EVENTS.AQUA_IDENTITY_AWARDED_NFTS_DETAILS, (event) => {
   // Example of response
   // event = { 
-  //   data: {
-  //     nfts: {
+  //   "data": {
+  //     "nfts": {
   //        0: 1,
   //        1: 0,
   //        2: 0,

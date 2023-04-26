@@ -23,7 +23,7 @@ export enum EXTERNAL_EVENTS {
 export interface WalletAddressEvent {
   isLoggedIn: boolean;
   walletAddress: string | null;
-  token: string | null;
+  jwtToken: string | null;
   nftList: NFTTypes[];
   ownedNfts: RetrievedNFTDetails;
 }
@@ -31,7 +31,7 @@ export interface WalletAddressEvent {
 export interface LoginEvent {
   isLoggedIn: boolean;
   walletAddress: string;
-  token: string;
+  jwtToken: string;
   nftList: NFTTypes[];
   ownedNfts: RetrievedNFTDetails;
 }
