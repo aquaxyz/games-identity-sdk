@@ -60,7 +60,7 @@ const awardNFT = async () => {
 
 const verifyUserIdentity = async () => {
     await aquaIdentity.verifyUserIdentity({
-        walletAddress: YOUR_WALLET_ADDRESS // Replace YOUR_WALLET_ADDRESS with the wallet address that needs to be verified
+        walletAddress: YOUR_WALLET_ADDRESS, // Replace YOUR_WALLET_ADDRESS with the wallet address that needs to be verified
         token: YOUR_TOKEN // Replace YOUR_TOKEN with the jwt token
 
     })
