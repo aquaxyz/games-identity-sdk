@@ -1,81 +1,35 @@
-import { RetrievedNFTDetails } from "./events";
-import { CheckNFT, fromNFTToIndex } from "./types";
+import FingerprintJS from "@fingerprintjs/fingerprintjs-pro";
 
-const aquaV2URL = "https://api-v2.aqua.xyz";
+import { generateJWTToken, retrieveOwnedNFTDetails } from "./api/aquaStudios";
+import { getCachedUserData, deleteCachedUserData } from "./api/cacheUserData";
+import { CheckNFT, IUserInfo, NFTTypes, IWalletAddress } from "./types";
 
 export const checkNFTOwnership = async ({
   walletAddress,
   nftType,
 }: CheckNFT) => {
-  const nftList = await getNFTOwnership(walletAddress);
+  const nftList = await getNFTOwnership(walletAddress.toLowerCase());
 
   return {
     valid: nftList.includes(nftType),
   };
 };
 
-export const retrieveNFTList = async ({
-  walletAddress,
-}: {
-  walletAddress: string;
-}) => {
-  const nftList = await getNFTOwnership(walletAddress);
+export const retrieveNFTList = async ({ walletAddress }: IWalletAddress) => {
+  const nftList = await getNFTOwnership(walletAddress.toLowerCase());
   return nftList;
 };
 
-export const verifyUserIdentity = async ({
-  wallet_address,
-  jwt_token,
-}: {
-  wallet_address: string;
-  jwt_token: string;
-}) => {
-  const response = await fetch(
-    `${aquaV2URL}/aquaStudios/validate-jwt-token?${new URLSearchParams({
-      wallet_address,
-      jwt_token,
-    })}`
-  );
-  const json = await response.json();
-  if (json?.error) {
-    throw new Error(
-      `${json.error}. ${JSON.stringify(
-        {
-          jwtToken: json.jwt_token,
-          walletAddress: json.wallet_address,
-        },
-        null,
-        2
-      )}`
-    );
-  }
+// TODO: TO BE DEPRECATED
 
-  return {
-    valid: true,
-    jwtToken: json.jwt_token,
-    walletAddress: json.wallet_address,
-  };
-};
-
-export const awardNFT = async ({ walletAddress, nftType }: CheckNFT) => {
-  const { status } = await fetch(
-    `${aquaV2URL}/aquaStudios/mint?${new URLSearchParams({
-      wallet_address: walletAddress,
-      nft_type: fromNFTToIndex[nftType].toString(),
-    })}`
-  );
-
-  return { valid: status === 200 };
-};
-
-const getNFTOwnership = async (walletAddress: string): Promise<string[]> => {
+const getNFTOwnership = async (walletAddress: string): Promise<NFTTypes[]> => {
   const tokenAddress = "0x87966e1e839065d6abf069e685f1cd3ba987ff51";
   const boostAssetClassKeys = {
     "aqua_boosts:TimeBonus": "slowdown",
     "aqua_boosts:Rewind": "redo",
     "aqua_boosts:Skip": "skip",
   };
-  const url = `${aquaV2URL}/wallet-summary?wallet_address=${walletAddress?.toLowerCase()}&token_addresses=${tokenAddress}`;
+  const url = `https://api-v2.aqua.xyz/wallet-summary?wallet_address=${walletAddress}&token_addresses=${tokenAddress}`;
 
   const response = await fetch(url);
   const data = await response.json();
@@ -89,28 +43,48 @@ const getNFTOwnership = async (walletAddress: string): Promise<string[]> => {
   );
 };
 
-export const retrieveOwnedNFTDetails = async (wallet_address: string) => {
-  const response = await fetch(
-    `${aquaV2URL}/aquaStudios/retrieve-owned-nfts?${new URLSearchParams({
-      wallet_address,
-    })}`
-  );
-  const json = await response.json();
-  if (!response.ok) {
-    throw new Error(json.msg ?? json.message);
-  }
-  return { nfts: json as RetrievedNFTDetails };
+export const getBrowserFingerprint = async () => {
+  const fp = await FingerprintJS.load({
+    apiKey: "i3QlmfXIQONAODnnwwWa",
+  });
+
+  const result = await fp.get({ extendedResult: true });
+
+  return result;
 };
 
-export const retrieveAwardNFTDetails = async (wallet_address: string) => {
-  const response = await fetch(
-    `${aquaV2URL}/aquaStudios/retrieve-awarded-nfts?${new URLSearchParams({
-      wallet_address,
-    })}`
-  );
-  const json = await response.json();
-  if (!response.ok) {
-    throw new Error(json.msg ?? json.message);
+export const getUserDetails = async (visitorId: string): Promise<IUserInfo> => {
+  const { walletAddress } = await getCachedUserData(visitorId);
+  const response = {
+    isLoggedIn: false,
+    walletAddress: null,
+    jwtToken: null,
+    nftList: [],
+    nfts: {
+      0: 0,
+      1: 0,
+      2: 0,
+    },
+  };
+
+  if (walletAddress) {
+    const nftList = await getNFTOwnership(walletAddress);
+    const jwtToken = await generateJWTToken(walletAddress);
+    const { nfts } = await retrieveOwnedNFTDetails(walletAddress);
+
+    return {
+      isLoggedIn: true,
+      walletAddress,
+      jwtToken,
+      nftList,
+      nfts,
+    };
   }
-  return { nfts: json as RetrievedNFTDetails };
+
+  return response;
+};
+
+export const logoutUser = async (visitorId: string) => {
+  const response = await deleteCachedUserData(visitorId);
+  return response;
 };

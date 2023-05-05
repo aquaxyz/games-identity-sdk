@@ -1,29 +1,39 @@
 import events from "events";
-import { Environment, View, NFTTypes } from "./types";
+import { ExtendedGetResult } from "@fingerprintjs/fingerprintjs-pro";
 
-import { closeModal, computeModalSize, generateModalContent } from "./modal";
+import {
+  Environment,
+  IEventMessage,
+  IUserInfo,
+  IVerifyUserIdentity,
+  IWalletAddress,
+  NFTTypes,
+} from "./types";
 
+import { LoginModal } from "./modal";
+
+import {
+  checkNFTOwnership,
+  getBrowserFingerprint,
+  getUserDetails,
+  logoutUser,
+  retrieveNFTList,
+} from "./requests";
+import { EVENTS } from "./events";
 import {
   awardNFT,
-  checkNFTOwnership,
   retrieveAwardNFTDetails,
-  retrieveNFTList,
   retrieveOwnedNFTDetails,
   verifyUserIdentity,
-} from "./requests";
-import {
-  EVENTS,
-  WalletAddressEvent,
-  LoginEvent,
-  LogoutEvent,
-  EXTERNAL_EVENTS,
-} from "./events";
+} from "./api";
 
 const eventEmitter = new events.EventEmitter();
 
 export class AquaIdentitySDK {
   private readonly environment: Environment;
   private readonly defaultUrl: string | undefined;
+  private browserFingerprint: ExtendedGetResult | undefined;
+  private modal: LoginModal;
 
   constructor({
     defaultUrl,
@@ -33,37 +43,70 @@ export class AquaIdentitySDK {
     defaultUrl?: string;
   }) {
     this.environment = environment;
+    this.modal = new LoginModal();
+
     if (defaultUrl) {
       this.defaultUrl = defaultUrl;
     }
 
-    window.onmessage = this.handleMessage;
+    window.onmessage = (e) => this.handleMessage(e, this.modal);
+  }
+
+  private async init() {
+    this.browserFingerprint = await getBrowserFingerprint();
   }
 
   public async login({ isLandscape = false }: { isLandscape?: boolean }) {
-    const { width, height } = computeModalSize(isLandscape);
-    generateModalContent({
-      width,
-      height,
-      defaultUrl: this.defaultUrl,
-      environment: this.environment,
-      view: View.LOGIN,
-    });
+    if (this.browserFingerprint === undefined) {
+      await this.init();
+    }
+
+    if (!this.browserFingerprint) {
+      throw new Error("Could not get the visitor id");
+    }
+
+    const isMobile = this.browserFingerprint.device !== "Other";
+
+    const url = `${
+      this.environment === Environment.DEVELOPMENT && this.defaultUrl
+        ? this.defaultUrl
+        : this.environment
+    }/identity/login`;
+
+    this.modal.showModal(isLandscape, isMobile, url);
   }
 
   public async logout() {
-    generateModalContent({
-      environment: this.environment,
-      view: View.LOGOUT,
-      defaultUrl: this.defaultUrl,
+    if (this.browserFingerprint === undefined) {
+      await this.init();
+    }
+
+    if (!this.browserFingerprint) {
+      throw new Error("Could not get the visitor id");
+    }
+
+    const data = await logoutUser(this.browserFingerprint?.visitorId);
+
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_OUT,
     });
   }
 
   public async getWalletAddress() {
-    generateModalContent({
-      environment: this.environment,
-      view: View.WALLET_ADDRESS,
-      defaultUrl: this.defaultUrl,
+    if (this.browserFingerprint === undefined) {
+      await this.init();
+    }
+
+    if (!this.browserFingerprint) {
+      throw new Error("Could not get the visitor id");
+    }
+
+    const data = await getUserDetails(this.browserFingerprint?.visitorId);
+
+    eventEmitter.emit(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, {
+      data,
+      eventName: EVENTS.AQUA_IDENTITY_WALLET_ADDRESS,
     });
   }
 
@@ -89,19 +132,16 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async retrieveNFTList(queryParams: { walletAddress: string }) {
-    const data = await retrieveNFTList(queryParams);
+  // TODO: TO BE DEPRECATED
+  public async retrieveNFTList({ walletAddress }: IWalletAddress) {
+    const data = await retrieveNFTList({ walletAddress });
     eventEmitter.emit(EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST, {
       data,
       eventName: EVENTS.AQUA_IDENTITY_RETRIEVE_NFT_LIST,
     });
   }
 
-  public async getAwardedDetailedNFTs({
-    walletAddress,
-  }: {
-    walletAddress: string;
-  }) {
+  public async getAwardedDetailedNFTs({ walletAddress }: IWalletAddress) {
     const data = await retrieveAwardNFTDetails(walletAddress);
     eventEmitter.emit(EVENTS.AQUA_IDENTITY_AWARDED_NFTS_DETAILS, {
       data,
@@ -109,12 +149,9 @@ export class AquaIdentitySDK {
     });
   }
 
-  public async getOwnedDetailedNFTs({
-    walletAddress,
-  }: {
-    walletAddress: string;
-  }) {
+  public async getOwnedDetailedNFTs({ walletAddress }: IWalletAddress) {
     const data = await retrieveOwnedNFTDetails(walletAddress);
+
     eventEmitter.emit(EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS, {
       data,
       eventName: EVENTS.AQUA_IDENTITY_OWNED_NFTS_DETAILS,
@@ -124,50 +161,31 @@ export class AquaIdentitySDK {
   public async verifyUserIdentity({
     jwtToken,
     walletAddress,
-  }: {
-    jwtToken: string;
-    walletAddress: string;
-  }) {
-    const data = await verifyUserIdentity({
-      jwt_token: jwtToken,
-      wallet_address: walletAddress,
-    });
+  }: IVerifyUserIdentity) {
+    const data = await verifyUserIdentity({ jwtToken, walletAddress });
+
     eventEmitter.emit(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, {
       data,
       eventName: EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY,
     });
   }
 
-  public on(
-    type: EVENTS,
-    cb: (event: {
-      data?: WalletAddressEvent | LoginEvent | LogoutEvent;
-    }) => void
-  ) {
+  public on(type: EVENTS, cb: (event: { data: IUserInfo }) => void) {
     if (EVENTS[type]) {
       eventEmitter.on(type, cb);
     }
   }
 
-  private handleMessage(event: {
-    data: {
-      data: WalletAddressEvent | LoginEvent | LogoutEvent;
-      event_id: EXTERNAL_EVENTS;
-    };
-  }) {
-    const isAquaIdentityEvent =
-      event &&
-      event.data &&
-      event.data.event_id &&
-      EXTERNAL_EVENTS[event.data.event_id] !== undefined;
-
-    if (isAquaIdentityEvent) {
-      eventEmitter.emit(EVENTS[`AQUA_IDENTITY_${event.data.event_id}`], {
+  private handleMessage(event: IEventMessage, modal: LoginModal) {
+    const eventName = EVENTS[`AQUA_IDENTITY_${event.data.event_id}`];
+    if (eventName) {
+      eventEmitter.emit(eventName, {
         data: event.data.data,
-        eventName: EVENTS[`AQUA_IDENTITY_${event.data.event_id}`],
+        eventName,
       });
-      if (event.data.event_id === EXTERNAL_EVENTS.MODAL_CLOSE) {
-        closeModal();
+
+      if (eventName === EVENTS.AQUA_IDENTITY_MODAL_CLOSE) {
+        modal.closeModal();
       }
     }
   }

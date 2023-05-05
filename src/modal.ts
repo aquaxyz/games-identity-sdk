@@ -1,12 +1,12 @@
-import { Container, View, Environment, ModalParams } from "./types";
+import { Container } from "./types";
 
-const getCSS = (width: string, height: string) => {
+const getCSS = (width: number, height: number) => {
   return `
 .aquaIdentityModal {
   display: block;
-  width: ${width};
-  max-width: ${width};
-  height: ${height};
+  width: ${width}px;
+  max-width: ${width}px;
+  height: ${height}px;
   max-height: 100%;
   position: fixed;
   z-index: 100;
@@ -19,7 +19,7 @@ const getCSS = (width: string, height: string) => {
 }
 
 #aquaIdentityModalWidget{
-  min-height: ${height}; 
+  min-height: ${height}px; 
   position: absolute; 
   border: none; 
   margin: 0px auto; 
@@ -47,188 +47,106 @@ const getCSS = (width: string, height: string) => {
   display: flex;
 }
 
-@media all and (max-width: ${width}) {
+@media all and (max-width: ${width}px) {
   .aquaIdentityModal {
     height: 100%;
-    max-height: ${height};
+    max-height: ${height}px;
     top: 50%;
   }
 }
 
-@media all and (max-height: ${height}) and (max-width: ${width}) {
+@media all and (max-height: ${height}px) and (max-width: ${width}px) {
     #aquaIdentityModalWidget{
       padding-bottom: 15px;
     }
   }`;
 };
+export class LoginModal {
+  private computeModalWithMobileSize = (isLandscape: boolean) => {
+    const MIN_WIDTH = 300;
+    const MAX_WIDTH = 448;
+    const MAX_HEIGHT = 660;
 
-export interface AuthError {
-  status: "ERROR";
-  msg: string;
-}
-export interface AuthChallengeResponse extends Partial<AuthError> {
-  public_address: string;
-  challenge: string;
-  sb_user_id: string;
-}
+    const { innerWidth, innerHeight } = window;
 
-const setStyle = (width: string, height: string) => {
-  const style = document.createElement("style");
-  style.innerHTML = getCSS(width, height);
-  const modal = document.getElementById("aquaIdentityModalWrapper");
-  if (modal) {
-    modal.appendChild(style);
-  }
-};
+    const horizontalPadding = isLandscape ? 50 : 10;
+    const verticalPadding = isLandscape ? 10 : 60;
 
-export const closeModal = () => {
-  const modal = document.getElementById("aquaIdentityModalWrapper");
+    const width = Math.min(
+      Math.max(innerWidth - horizontalPadding, MIN_WIDTH),
+      MAX_WIDTH
+    );
+    const height = Math.min(
+      Math.max(innerHeight - verticalPadding, innerHeight - verticalPadding),
+      MAX_HEIGHT
+    );
 
-  if (modal && modal.style) {
-    modal.style.display = "none";
-    modal.innerHTML = "";
-    modal.remove();
-  }
-};
+    return { width, height };
+  };
 
-export const generateModalContent = ({
-  width = "0px",
-  height = "0px",
-  view,
-  environment,
-  defaultUrl,
-  query,
-}: ModalParams) => {
-  const path =
-    environment === Environment.DEVELOPMENT && defaultUrl
-      ? defaultUrl
-      : environment;
+  public showModal = (isLandscape: boolean, isMobile: boolean, url: string) => {
+    let modalSizes = {
+      width: 375,
+      height: 667,
+    };
 
-  let url = `${path}/identity/${view}`;
+    if (isMobile) {
+      modalSizes = this.computeModalWithMobileSize(isLandscape);
+    }
+    const { width, height } = modalSizes;
 
-  if (query) {
-    url += `?${query}`;
-  }
+    // create modal structure
+    let wrapper = document.getElementById("aquaIdentityModalWrapper");
+    if (!wrapper) {
+      wrapper = document.createElement("div");
+      wrapper.id = "aquaIdentityModalWrapper";
+    }
 
-  let wrapper = document.getElementById("aquaIdentityModalWrapper");
-  if (!wrapper) {
-    wrapper = document.createElement("div");
-    wrapper.id = "aquaIdentityModalWrapper";
-  }
-
-  const iframeHTML = `<iframe 
-  id="aquaIdentityWidget" 
-  allow="fullscreen" 
-  src="${url}" 
-  style="width: ${width}; height: ${height};border: 0px"
-  ></iframe>`;
-  let innerHTML = iframeHTML;
-
-  if (view === View.LOGIN) {
-    innerHTML = `
+    wrapper.innerHTML = `
       <div class="aquaIdentityModalOverlay">
       </div>
       <div class="aquaIdentityModal" id="aquaIdentityModal">
         <div class="aquaIdentityModalContent">
           <div class="aquaIdentityContainer">
-            ${iframeHTML}
+            <iframe 
+              id="aquaIdentityWidget" 
+              allow="fullscreen" 
+              src=${url}
+              style="width: ${width}px; height: ${height}px;border: 0px"
+            >
+            </iframe>
           </div>
         </div>
       </div>`;
-  }
 
-  wrapper.innerHTML = innerHTML;
+    let container: Container = document.getElementsByTagName("body");
+    if (!container) {
+      container = document.getElementsByTagName("html");
+    }
+    if (!container) {
+      container = document.getElementsByTagName("div");
+    }
+    container[0].appendChild(wrapper);
 
-  let container: Container = document.getElementsByTagName("body");
-  if (!container) {
-    container = document.getElementsByTagName("html");
-  }
-  if (!container) {
-    container = document.getElementsByTagName("div");
-  }
-  container[0].appendChild(wrapper);
+    // set modal style
+    const style = document.createElement("style");
+    style.innerHTML = getCSS(width, height);
 
-  setStyle(width, height);
+    wrapper.appendChild(style);
 
-  const modal = document.getElementById("aquaIdentityModal");
-  if (modal && modal.style) {
-    modal.style.display = "block";
-  }
-};
-
-const getSizeBetweenMinMax = (
-  min: number,
-  max: number,
-  value: number
-): number => {
-  if (value >= min && value <= max) {
-    return value;
-  }
-  if (value >= max) {
-    return max;
-  }
-
-  return min;
-};
-
-export const computeModalSize = (isLandscape = false) => {
-  const MOBILE_USER_AGENTS = [
-    /Android/i,
-    /webOS/i,
-    /iPhone/i,
-    /iPad/i,
-    /iPod/i,
-    /BlackBerry/i,
-    /Windows Phone/i,
-  ];
-
-  const isMobile =
-    MOBILE_USER_AGENTS.reduce((acc, agent) => {
-      if (acc) {
-        return acc;
-      }
-
-      const agentMatches = navigator.userAgent.match(agent);
-
-      return agentMatches ? agentMatches?.length > 1 : false;
-    }, false) ||
-    (/Macintosh/i.test(navigator.userAgent) &&
-      navigator.maxTouchPoints &&
-      navigator.maxTouchPoints > 1);
-
-  if (!isMobile) {
-    return {
-      width: "375px",
-      height: "667px",
-    };
-  }
-
-  const minWidth = 300;
-  const maxWidth = 448;
-
-  const portraitWidth = getSizeBetweenMinMax(
-    minWidth,
-    maxWidth,
-    window.innerWidth - 10
-  );
-  const landscapeWidth = getSizeBetweenMinMax(
-    minWidth,
-    maxWidth,
-    window.innerWidth - 50
-  );
-
-  const width = isLandscape ? landscapeWidth : portraitWidth;
-
-  const maxHeight = 660;
-
-  const portraitHeight =
-    window.innerHeight - 60 > maxHeight ? maxHeight : window.innerHeight - 60;
-  const landscapeHeight =
-    window.innerHeight - 10 > maxHeight ? maxHeight : window.innerHeight - 10;
-
-  const height = isLandscape ? landscapeHeight : portraitHeight;
-  return {
-    width: `${width}px`,
-    height: `${height}px`,
+    const modal = document.getElementById("aquaIdentityModal");
+    if (modal && modal.style) {
+      modal.style.display = "block";
+    }
   };
-};
+
+  public closeModal = () => {
+    const modal = document.getElementById("aquaIdentityModalWrapper");
+
+    if (modal && modal.style) {
+      modal.style.display = "none";
+      modal.innerHTML = "";
+      modal.remove();
+    }
+  };
+}
