@@ -1,4 +1,4 @@
-# @aqua.xyz/identity-sdk
+# @aqua.xyz/games-identity-sdk
 
 A typescript library using aqua identity authentication.
 
