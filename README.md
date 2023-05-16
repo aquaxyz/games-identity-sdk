@@ -8,10 +8,10 @@ A typescript library using aqua identity authentication.
 
 ```sh
 # Using yarn
-$ yarn add @aqua.xyz/identity-sdk
+$ yarn add @aqua.xyz/games-identity-sdk
 
 # Using npm
-$ npm install @aqua.xyz/identity-sdk
+$ npm install @aqua.xyz/games-identity-sdk
 ```
 
 ### Example usage
@@ -22,7 +22,7 @@ import {
   Environment,
   EVENTS,
   NFTTypes,
-} from "@aqua.xyz/identity-sdk";
+} from "@aqua.xyz/games-identity-sdk";
 
 ```
 
