@@ -29,5 +29,5 @@ After creating a new build version, you should:
 2. create a pull request
 3. ship it to `main`
 4. go to `main` branch and run `npm publish`
-5. after successfully publishing the new version, check if the new version is visible [here](https://www.npmjs.com/package/@aqua.xyz/identity-sdk)
+5. after successfully publishing the new version, check if the new version is visible [here](https://www.npmjs.com/package/@aqua.xyz/games-identity-sdk)
 6. if you are at this step, you only need to make the announcement that the new version is ready to be integrated and briefly write some release notes.

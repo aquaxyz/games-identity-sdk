@@ -1,5 +1,5 @@
 {
-  "name": "@aqua.xyz/identity-sdk",
+  "name": "@aqua.xyz/games-identity-sdk",
   "packageManager": "yarn@3.2.4",
   "version": "1.0.19",
   "description": "A typescript library using aqua identity authentication.",
@@ -45,14 +45,14 @@
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aquaxyz/identity-sdk.git"
+    "url": "git+https://github.com/aquaxyz/games-identity-sdk.git"
   },
   "keywords": [
     "aquaxyz",
-    "identity"
+    "games-identity"
   ],
   "bugs": {
-    "url": "https://github.com/aquaxyz/identity-sdk/issues"
+    "url": "https://github.com/aquaxyz/games-identity-sdk/issues"
   },
-  "homepage": "https://github.com/aquaxyz/identity-sdk#readme"
+  "homepage": "https://github.com/aquaxyz/games-identity-sdk#readme"
 }
