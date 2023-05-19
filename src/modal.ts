@@ -198,8 +198,8 @@ export const computeModalSize = (isLandscape = false) => {
 
   if (!isMobile) {
     return {
-      width: "375px",
-      height: "667px",
+      width: "380px",
+      height: "735px",
     };
   }
 
