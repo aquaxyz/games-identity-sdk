@@ -179,7 +179,6 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_VERIFY_USER_IDENTITY, (event) => {
   // event = { 
   //   "data": {
   //     "valid": true,
-  //     "jwtToken":  "sfsaxewgwdsf...",
   //     "walletAddress": "0xewgwt34...",
   //   }
   // }

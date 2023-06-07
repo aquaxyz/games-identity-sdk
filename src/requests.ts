@@ -41,7 +41,6 @@ export const verifyUserIdentity = async ({
     throw new Error(
       `${json.error}. ${JSON.stringify(
         {
-          jwtToken: json.jwt_token,
           walletAddress: json.wallet_address,
         },
         null,
@@ -52,7 +51,6 @@ export const verifyUserIdentity = async ({
 
   return {
     valid: true,
-    jwtToken: json.jwt_token,
     walletAddress: json.wallet_address,
   };
 };
