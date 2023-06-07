@@ -117,6 +117,10 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_SUCCESSFULLY_LOG_IN, (event) => {
   //     "isLoggedIn": true,
   //     "jwtToken":  "sfsaxewgwdsf...",
   //     "walletAddress": "0xewgwt34...",
+  //     "profile": {
+  //        "username":"John",
+  //        "avatar": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0..."
+  //     },
   //     "nftList": [
   //         "skip",
   //         "redo",
@@ -150,6 +154,10 @@ aquaIdentity.on(EVENTS.AQUA_IDENTITY_WALLET_ADDRESS, (event) => {
   //     "isLoggedIn": true,
   //     "jwtToken":  "sfsaxewgwdsf...",
   //     "walletAddress": "0xewgwt34...",
+  //     "profile": {
+  //        "username":"John",
+  //        "avatar": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0..."
+  //     },
   //     "nftList": [
   //         "skip",
   //         "redo",
